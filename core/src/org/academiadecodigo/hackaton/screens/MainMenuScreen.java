@@ -22,7 +22,7 @@ public class MainMenuScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
 
-        texture = new Texture(Gdx.files.internal("bg.jpg"));
+        texture = new Texture(Gdx.files.internal("backGround.jpg"));
     }
 
     @Override

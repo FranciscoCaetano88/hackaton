@@ -15,6 +15,7 @@ public class GameEngine extends Game {
 		batch = new SpriteBatch();
 
 		font = new BitmapFont();
+
 		this.setScreen(new MainMenuScreen(this));
 	}
 
