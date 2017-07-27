@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import org.academiadecodigo.hackaton.GameEngine;
-import org.academiadecodigo.hackaton.screens.objects.Drop;
+import org.academiadecodigo.hackaton.screens.objects.Dropable;
 import org.academiadecodigo.hackaton.screens.objects.Player;
 
 
@@ -31,18 +31,18 @@ public class GameScreen implements Screen {
     private Score score;
 
     private Sound dropSound;
-    private Music rainMusic;
+    private Music music;
     private SpriteBatch batch;
     private OrthographicCamera camera;
 
-    private Array<Drop> raindrops;
+    private Array<Dropable> raindrops;
     private long lastDropTime;
 
     private Texture backGroundImage;
     private Rectangle backGround;
 
     private Player player;
-    private Drop drop;
+    private Dropable dropable;
 
     public final static int SCREEN_SIZE_X = 600;
     public final static int SCREEN_SIZE_Y = 480;
@@ -59,13 +59,13 @@ public class GameScreen implements Screen {
         // load the images for the droplet and the player, 64x64 pixels each
         backGroundImage = new Texture(Gdx.files.internal("sad_kitten.jpeg"));
 
-        // load the drop sound effect and the rain background "music"
-        dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
-        rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
+        // load the dropable sound effect and the rain background "music"
+        dropSound = Gdx.audio.newSound(Gdx.files.internal("dropable.wav"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("The Rolling Stones - Paint it black.mp3"));
 
         score = new Score();
 
-        drop = new Drop();
+        dropable = new Dropable();
         player = new Player();
     }
 
@@ -73,11 +73,11 @@ public class GameScreen implements Screen {
     public void show() {
 
         player.create();
-        drop.create();
+        dropable.create();
 
         // start the playback of the background music immediately
-        rainMusic.setLooping(true);
-        rainMusic.play();
+        music.setLooping(true);
+        music.play();
 
         // create the camera and the SpriteBatch
         camera = new OrthographicCamera();
@@ -92,14 +92,14 @@ public class GameScreen implements Screen {
         backGround.height = SCREEN_SIZE_Y;
 
         // create the raindrops array and spawn the first raindrop
-        raindrops = new Array<Drop>();
+        raindrops = new Array<Dropable>();
         spawnRaindrop();
 
     }
 
     private void spawnRaindrop() {
 
-        Drop raindrop = new Drop();
+        Dropable raindrop = new Dropable();
         raindrop.create();
         raindrop.getRectangle().x = MathUtils.random(0, SCREEN_SIZE_X - 64);
         raindrop.getRectangle().y = SCREEN_SIZE_Y;
@@ -137,8 +137,8 @@ public class GameScreen implements Screen {
         batch.begin();
         //batch.draw(backGroundImage, backGround.x, backGround.y);
 
-        for (Drop raindrop : raindrops) {
-            batch.draw(drop.getImage(),
+        for (Dropable raindrop : raindrops) {
+            batch.draw(dropable.getImage(),
                     raindrop.getRectangle().x,
                     raindrop.getRectangle().y);
 
@@ -153,9 +153,9 @@ public class GameScreen implements Screen {
         batch.begin();
         batch.draw(player.getBucketImage(), player.getRectangle().x, player.getRectangle().y);
 
-        for (Drop raindrop : raindrops) {
+        for (Dropable raindrop : raindrops) {
 
-            batch.draw(drop.getImage(), raindrop.getRectangle().x, raindrop.getRectangle().y);
+            batch.draw(dropable.getImage(), raindrop.getRectangle().x, raindrop.getRectangle().y);
         }
 
         batch.end();
@@ -196,10 +196,10 @@ public class GameScreen implements Screen {
         // move the raindrops, remove any that are beneath the bottom edge of
         // the screen or that hit the player. In the later case we play back
         // a sound effect as well.
-        Iterator<Drop> iter = raindrops.iterator();
+        Iterator<Dropable> iter = raindrops.iterator();
         while (iter.hasNext()) {
 
-            Drop raindrop = iter.next();
+            Dropable raindrop = iter.next();
             raindrop.getRectangle().y -= MOVE_SPEED * Gdx.graphics.getDeltaTime();
 
             if (raindrop.getRectangle().y + 64 < 0) {
@@ -241,10 +241,10 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         // dispose of all the native resources
-        drop.getImage().dispose();
+        dropable.getImage().dispose();
         player.getBucketImage().dispose();
         dropSound.dispose();
-        rainMusic.dispose();
+        music.dispose();
         batch.dispose();
 
         backGroundImage.dispose();
