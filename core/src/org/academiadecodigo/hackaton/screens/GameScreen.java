@@ -25,6 +25,13 @@ import org.academiadecodigo.hackaton.screens.objects.dropable.DropableFactory;
 
 public class GameScreen implements Screen {
 
+
+    private final double PRODUCTION_RATE=2;
+    public final static int SCREEN_SIZE_X = GameEngine.WIDTH;
+    public final static int SCREEN_SIZE_Y = GameEngine.HEIGHT;
+    private final int MOVE_SPEED = 400;
+    private final int DROP_SPEED = 300;
+
     private final GameEngine game;
 
     private int dropsGathered;
@@ -45,9 +52,6 @@ public class GameScreen implements Screen {
     private Player player;
 
 
-    public final static int SCREEN_SIZE_X = GameEngine.WIDTH;
-    public final static int SCREEN_SIZE_Y = GameEngine.HEIGHT;
-    private final int MOVE_SPEED = 500;
 
     public GameScreen(GameEngine game) {
         this.game = game;
@@ -58,7 +62,7 @@ public class GameScreen implements Screen {
     private void init() {
 
         // load the images for the droplet and the player, 64x64 pixels each
-        backGroundImage = new Texture(Gdx.files.internal("sad_kitten.jpeg"));
+        backGroundImage = new Texture(Gdx.files.internal("game_background.jpg"));
 
         // load the dropable sound effect and the rain background "music"
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
@@ -86,8 +90,8 @@ public class GameScreen implements Screen {
 
         // create a Rectangle to logically represent the player
         backGround = new Rectangle();
-        backGround.x = 0; //
-        backGround.y = 0; //
+        backGround.x = 0;
+        backGround.y = 0;
         backGround.width = SCREEN_SIZE_X;
         backGround.height = SCREEN_SIZE_Y;
 
@@ -95,7 +99,6 @@ public class GameScreen implements Screen {
         dropables = new Array<Dropable>();
 
         spawnRaindrop();
-
     }
 
     private void spawnRaindrop() {
@@ -132,7 +135,6 @@ public class GameScreen implements Screen {
 
         batch.begin();
         batch.draw(backGroundImage, backGround.x, backGround.y);
-
         batch.end();
 
         batch.begin();
@@ -163,7 +165,10 @@ public class GameScreen implements Screen {
 
         batch.end();
 
+        update(delta);
+    }
 
+    public void update(float delta) {
         // process user input
         if (Gdx.input.isTouched()) {
 
@@ -191,7 +196,7 @@ public class GameScreen implements Screen {
         }
 
         // check if we need to create a new raindrop
-        if (TimeUtils.nanoTime() - lastDropTime > 1000000000) {
+        if (TimeUtils.nanoTime() - lastDropTime > (1000000000 / PRODUCTION_RATE)) {
 
             spawnRaindrop();
         }
@@ -203,7 +208,7 @@ public class GameScreen implements Screen {
         while (iter.hasNext()) {
 
             Dropable raindrop = iter.next();
-            raindrop.getRectangle().y -= MOVE_SPEED * Gdx.graphics.getDeltaTime();
+            raindrop.getRectangle().y -= DROP_SPEED * Gdx.graphics.getDeltaTime();
 
             if (raindrop.getRectangle().y + 64 < 0) {
                 iter.remove();

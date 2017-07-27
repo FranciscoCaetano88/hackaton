@@ -22,7 +22,7 @@ public class MainMenuScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, GameEngine.WIDTH, GameEngine.HEIGHT);
 
-        texture = new Texture(Gdx.files.internal("mainScreenBackground.jpg"));
+        texture = new Texture(Gdx.files.internal("beg_screen.jpg"));
     }
 
     @Override
@@ -40,8 +40,6 @@ public class MainMenuScreen implements Screen {
 
         gameEngine.getBatch().begin();
         gameEngine.getBatch().draw(texture, 0, 0);
-        gameEngine.getFont().draw(gameEngine.getBatch(), "Welcome to GameEngine!", 100, 150);
-        gameEngine.getFont().draw(gameEngine.getBatch(), "Tap anywhere to begin!", 100, 100);
         gameEngine.getBatch().end();
 
         if (Gdx.input.isTouched()) {
