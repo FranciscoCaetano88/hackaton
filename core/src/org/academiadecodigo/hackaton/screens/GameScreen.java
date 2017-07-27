@@ -79,15 +79,14 @@ public class GameScreen implements Screen {
         // create the camera and the SpriteBatch
         camera = new OrthographicCamera();
         camera.setToOrtho(false, SCREEN_SIZE_X, SCREEN_SIZE_Y);
-        batch = new SpriteBatch();
+        batch = game.getBatch();
 
         // create a Rectangle to logically represent the bucket
         backGround = new Rectangle();
-        backGround.x = 0; // center the bucket horizontally
-        backGround.y = 0; // bottom left corner of the bucket is 20 pixels above the bottom screen edge
+        backGround.x = 0; //
+        backGround.y = 0; //
         backGround.width = SCREEN_SIZE_X;
         backGround.height = SCREEN_SIZE_Y;
-
 
         // create the raindrops array and spawn the first raindrop
         raindrops = new Array<Drop>();
@@ -98,10 +97,10 @@ public class GameScreen implements Screen {
 
         Drop raindrop = new Drop();
         raindrop.create();
-        raindrop.getRectagle().x = MathUtils.random(0, SCREEN_SIZE_X - 64);
-        raindrop.getRectagle().y = SCREEN_SIZE_Y;
-        raindrop.getRectagle().width = 64;
-        raindrop.getRectagle().height = 64;
+        raindrop.getRectangle().x = MathUtils.random(0, SCREEN_SIZE_X - 64);
+        raindrop.getRectangle().y = SCREEN_SIZE_Y;
+        raindrop.getRectangle().width = 64;
+        raindrop.getRectangle().height = 64;
         raindrops.add(raindrop);
         lastDropTime = TimeUtils.nanoTime();
     }
@@ -127,12 +126,15 @@ public class GameScreen implements Screen {
 
         game.getFont().draw(game.getBatch(), "Drops Collected: " + dropsGathered, 0, 480);
 
+        batch.end();
+
+        batch.begin();
         batch.draw(backGroundImage, backGround.x, backGround.y);
 
         for (Drop raindrop : raindrops) {
             batch.draw(drop.getDropImage(),
-                    raindrop.getRectagle().x,
-                    raindrop.getRectagle().y);
+                    raindrop.getRectangle().x,
+                    raindrop.getRectangle().y);
 
         }
 
@@ -145,7 +147,7 @@ public class GameScreen implements Screen {
 
         for (Drop raindrop : raindrops) {
 
-            batch.draw(drop.getDropImage(), raindrop.getRectagle().x, raindrop.getRectagle().y);
+            batch.draw(drop.getDropImage(), raindrop.getRectangle().x, raindrop.getRectangle().y);
         }
 
         batch.end();
@@ -190,13 +192,13 @@ public class GameScreen implements Screen {
         while (iter.hasNext()) {
 
             Drop raindrop = iter.next();
-            raindrop.getRectagle().y -= MOVE_SPEED * Gdx.graphics.getDeltaTime();
+            raindrop.getRectangle().y -= MOVE_SPEED * Gdx.graphics.getDeltaTime();
 
-            if (raindrop.getRectagle().y + 64 < 0) {
+            if (raindrop.getRectangle().y + 64 < 0) {
                 iter.remove();
             }
 
-            if (raindrop.getRectagle().overlaps(bucket.getRectangle())) {
+            if (raindrop.getRectangle().overlaps(bucket.getRectangle())) {
                 dropSound.play();
                 iter.remove();
             }

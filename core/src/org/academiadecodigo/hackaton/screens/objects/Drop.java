@@ -10,10 +10,8 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Drop {
 
-
     private Texture dropImage;
     private Rectangle drop;
-
 
     public void create() {
 
@@ -21,7 +19,6 @@ public class Drop {
         drop = new Rectangle();
 
         dropImage = new Texture(Gdx.files.internal("droplet.png"));
-
     }
 
 
@@ -33,7 +30,7 @@ public class Drop {
         this.dropImage = dropImage;
     }
 
-    public Rectangle getRectagle() {
+    public Rectangle getRectangle() {
         return drop;
     }
 
