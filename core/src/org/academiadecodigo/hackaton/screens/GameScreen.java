@@ -45,8 +45,8 @@ public class GameScreen implements Screen {
     private Player player;
 
 
-    public final static int SCREEN_SIZE_X = 480;
-    public final static int SCREEN_SIZE_Y = 800;
+    public final static int SCREEN_SIZE_X = GameEngine.WIDTH;
+    public final static int SCREEN_SIZE_Y = GameEngine.HEIGHT;
     private final int MOVE_SPEED = 500;
 
     public GameScreen(GameEngine game) {
