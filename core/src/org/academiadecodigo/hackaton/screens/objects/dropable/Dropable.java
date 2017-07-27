@@ -31,4 +31,12 @@ public class Dropable {
     public void setDepressedDropableImage(Texture depressedDropableImage) {
         this.depressedDropableImage = depressedDropableImage;
     }
+
+    public boolean isDepressed() {
+        return depressed;
+    }
+
+    public void setDepressed(boolean depressed) {
+        this.depressed = depressed;
+    }
 }
