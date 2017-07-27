@@ -10,8 +10,8 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
 		config.title = "GameEngine";
-		config.width = 800;
-		config.height = 480;
+		config.width = 480;
+		config.height = 800;
 
 		new LwjglApplication(new GameEngine(), config);
 	}
