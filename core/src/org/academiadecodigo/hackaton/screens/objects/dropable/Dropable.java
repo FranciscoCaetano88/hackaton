@@ -8,24 +8,25 @@ public class Dropable {
     private Texture happyDropableImage;
     private Texture depressedDropableImage;
 
-    private Rectangle dropableRectangle;
+    private Rectangle rectangle;
 
     private boolean depressed = false;
 
-    public Texture getHappyDropableImage() {
-        return depressed ? depressedDropableImage : happyDropableImage;
+    public Texture getImage() {
+        return happyDropableImage;
+        //return depressed ? depressedDropableImage : happyDropableImage;
     }
 
     public void setHappyDropableImage(Texture dropImage) {
         this.happyDropableImage = dropImage;
     }
 
-    public Rectangle getDropableRectangle() {
-        return dropableRectangle;
+    public Rectangle getRectangle() {
+        return rectangle;
     }
 
-    public void setDropableRectangle(Rectangle dropableRectangle) {
-        this.dropableRectangle = dropableRectangle;
+    public void setRectangle(Rectangle rectangle) {
+        this.rectangle = rectangle;
     }
 
     public void setDepressedDropableImage(Texture depressedDropableImage) {
