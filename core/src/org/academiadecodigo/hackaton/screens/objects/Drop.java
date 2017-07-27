@@ -18,7 +18,7 @@ public  class Drop {
         // create a Rectangle to logically represent the rectangle
         rectangle = new Rectangle();
 
-        image = new Texture(Gdx.files.internal("droplet.png"));
+        image = new Texture(Gdx.files.internal("cake.png"));
     }
 
     public Texture getImage() {

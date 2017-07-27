@@ -24,7 +24,7 @@ import org.academiadecodigo.hackaton.screens.objects.Player;
 
 public class GameScreen implements Screen {
 
-    final GameEngine game;
+    private final GameEngine game;
 
     private int dropsGathered;
 
@@ -57,7 +57,7 @@ public class GameScreen implements Screen {
     private void init() {
 
         // load the images for the droplet and the player, 64x64 pixels each
-        backGroundImage = new Texture(Gdx.files.internal("background.jpg"));
+        backGroundImage = new Texture(Gdx.files.internal("sad_kitten.jpeg"));
 
         // load the drop sound effect and the rain background "music"
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
