@@ -4,9 +4,11 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class ScreenManager extends Game {
-	BitmapFont font;
-	SpriteBatch batch;
+import org.academiadecodigo.hackaton.screens.MainMenuScreen;
+
+public class GameEngine extends Game {
+	private BitmapFont font;
+	private SpriteBatch batch;
 
 	@Override
 	public void create () {
@@ -25,4 +27,13 @@ public class ScreenManager extends Game {
 		batch.dispose();
 		font.dispose();
 	}
+
+	public BitmapFont getFont() {
+		return font;
+	}
+
+	public SpriteBatch getBatch() {
+		return batch;
+	}
+
 }

@@ -1,4 +1,4 @@
-package org.academiadecodigo.hackaton;
+package org.academiadecodigo.hackaton.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -15,10 +15,12 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
+import org.academiadecodigo.hackaton.GameEngine;
+
 import java.util.Iterator;
 
 public class GameScreen implements Screen {
-    final ScreenManager game;
+    final GameEngine game;
 
     private Texture dropImage;
     private Texture bucketImage;
@@ -37,7 +39,7 @@ public class GameScreen implements Screen {
     private int dropsGathered;
 
 
-    public GameScreen(final ScreenManager game) {
+    public GameScreen(final GameEngine game) {
         this.game = game;
 
         dropImage = new Texture(Gdx.files.internal("droplet.png"));
@@ -72,15 +74,15 @@ public class GameScreen implements Screen {
 
         camera.update();
 
-        game.batch.setProjectionMatrix(camera.combined);
+        game.getBatch().setProjectionMatrix(camera.combined);
 
-        game.batch.begin();
-        game.font.draw(game.batch, "Drops Collected: "+ dropsGathered, 0, 480);
-        game.batch.draw(bucketImage, bucket.x, bucket.y);
+        game.getBatch().begin();
+        game.getFont().draw(game.getBatch(), "Drops Collected: "+ dropsGathered, 0, 480);
+        game.getBatch().draw(bucketImage, bucket.x, bucket.y);
         for (Rectangle raindrop : raindrops) {
-            game.batch.draw(dropImage, raindrop.x, raindrop.y);
+            game.getBatch().draw(dropImage, raindrop.x, raindrop.y);
         }
-        game.batch.end();
+        game.getBatch().end();
 
         if (Gdx.input.isTouched()) {
             Vector3 touchPos = new Vector3();
