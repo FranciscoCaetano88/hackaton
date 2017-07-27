@@ -18,8 +18,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import org.academiadecodigo.hackaton.GameEngine;
-import org.academiadecodigo.hackaton.screens.objects.Bucket;
 import org.academiadecodigo.hackaton.screens.objects.Drop;
+import org.academiadecodigo.hackaton.screens.objects.Player;
 
 
 public class GameScreen implements Screen {
@@ -28,6 +28,7 @@ public class GameScreen implements Screen {
 
     private int dropsGathered;
 
+    private Score score;
 
     private Sound dropSound;
     private Music rainMusic;
@@ -40,7 +41,7 @@ public class GameScreen implements Screen {
     private Texture backGroundImage;
     private Rectangle backGround;
 
-    private Bucket bucket;
+    private Player player;
     private Drop drop;
 
     public final static int SCREEN_SIZE_X = 600;
@@ -55,21 +56,23 @@ public class GameScreen implements Screen {
 
     private void init() {
 
-        // load the images for the droplet and the bucket, 64x64 pixels each
+        // load the images for the droplet and the player, 64x64 pixels each
         backGroundImage = new Texture(Gdx.files.internal("background.jpg"));
 
         // load the drop sound effect and the rain background "music"
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
         rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
 
+        score = new Score();
+
         drop = new Drop();
-        bucket = new Bucket();
+        player = new Player();
     }
 
     @Override
     public void show() {
 
-        bucket.create();
+        player.create();
         drop.create();
 
         // start the playback of the background music immediately
@@ -81,7 +84,7 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false, SCREEN_SIZE_X, SCREEN_SIZE_Y);
         batch = game.getBatch();
 
-        // create a Rectangle to logically represent the bucket
+        // create a Rectangle to logically represent the player
         backGround = new Rectangle();
         backGround.x = 0; //
         backGround.y = 0; //
@@ -91,6 +94,7 @@ public class GameScreen implements Screen {
         // create the raindrops array and spawn the first raindrop
         raindrops = new Array<Drop>();
         spawnRaindrop();
+
     }
 
     private void spawnRaindrop() {
@@ -122,32 +126,36 @@ public class GameScreen implements Screen {
         // coordinate system specified by the camera.
         batch.setProjectionMatrix(camera.combined);
 
-        batch.begin();
+        //batch.begin();
 
+        batch.begin();
+        batch.draw(backGroundImage, backGround.x, backGround.y);
         game.getFont().draw(game.getBatch(), "Drops Collected: " + dropsGathered, 0, 480);
 
         batch.end();
 
         batch.begin();
-        batch.draw(backGroundImage, backGround.x, backGround.y);
+        //batch.draw(backGroundImage, backGround.x, backGround.y);
 
         for (Drop raindrop : raindrops) {
-            batch.draw(drop.getDropImage(),
+            batch.draw(drop.getImage(),
                     raindrop.getRectangle().x,
                     raindrop.getRectangle().y);
 
         }
 
+        score.updateScoreBar();
+
         batch.end();
 
-        // begin a new batch and draw the bucket and
+        // begin a new batch and draw the player and
         // all drops
         batch.begin();
-        batch.draw(bucket.getBucketImage(), bucket.getRectangle().x, bucket.getRectangle().y);
+        batch.draw(player.getBucketImage(), player.getRectangle().x, player.getRectangle().y);
 
         for (Drop raindrop : raindrops) {
 
-            batch.draw(drop.getDropImage(), raindrop.getRectangle().x, raindrop.getRectangle().y);
+            batch.draw(drop.getImage(), raindrop.getRectangle().x, raindrop.getRectangle().y);
         }
 
         batch.end();
@@ -159,24 +167,24 @@ public class GameScreen implements Screen {
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
-            bucket.getRectangle().x = touchPos.x - 64 / 2;
+            player.getRectangle().x = touchPos.x - 64 / 2;
         }
 
         if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-            bucket.getRectangle().x -= MOVE_SPEED * Gdx.graphics.getDeltaTime();
+            player.getRectangle().x -= MOVE_SPEED * Gdx.graphics.getDeltaTime();
         }
 
         if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-            bucket.getRectangle().x += MOVE_SPEED * Gdx.graphics.getDeltaTime();
+            player.getRectangle().x += MOVE_SPEED * Gdx.graphics.getDeltaTime();
         }
 
-        // make sure the bucket stays within the screen bounds
-        if (bucket.getRectangle().x < 0) {
-            bucket.getRectangle().x = 0;
+        // make sure the player stays within the screen bounds
+        if (player.getRectangle().x < 0) {
+            player.getRectangle().x = 0;
         }
 
-        if (bucket.getRectangle().x > SCREEN_SIZE_X - 64) {
-            bucket.getRectangle().x = SCREEN_SIZE_X - 64;
+        if (player.getRectangle().x > SCREEN_SIZE_X - 64) {
+            player.getRectangle().x = SCREEN_SIZE_X - 64;
         }
 
         // check if we need to create a new raindrop
@@ -186,7 +194,7 @@ public class GameScreen implements Screen {
         }
 
         // move the raindrops, remove any that are beneath the bottom edge of
-        // the screen or that hit the bucket. In the later case we play back
+        // the screen or that hit the player. In the later case we play back
         // a sound effect as well.
         Iterator<Drop> iter = raindrops.iterator();
         while (iter.hasNext()) {
@@ -196,11 +204,15 @@ public class GameScreen implements Screen {
 
             if (raindrop.getRectangle().y + 64 < 0) {
                 iter.remove();
+
+                score.decrementScore();
             }
 
-            if (raindrop.getRectangle().overlaps(bucket.getRectangle())) {
+            if (raindrop.getRectangle().overlaps(player.getRectangle())) {
                 dropSound.play();
                 iter.remove();
+
+                score.incrementScore();
             }
         }
     }
@@ -229,8 +241,8 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         // dispose of all the native resources
-        drop.getDropImage().dispose();
-        bucket.getBucketImage().dispose();
+        drop.getImage().dispose();
+        player.getBucketImage().dispose();
         dropSound.dispose();
         rainMusic.dispose();
         batch.dispose();

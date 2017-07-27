@@ -8,33 +8,32 @@ import com.badlogic.gdx.math.Rectangle;
  * Created by codecadet on 27/07/2017.
  */
 
-public class Drop {
+public  class Drop {
 
-    private Texture dropImage;
-    private Rectangle drop;
+    private Texture image;
+    private Rectangle rectangle;
 
     public void create() {
 
-        // create a Rectangle to logically represent the drop
-        drop = new Rectangle();
+        // create a Rectangle to logically represent the rectangle
+        rectangle = new Rectangle();
 
-        dropImage = new Texture(Gdx.files.internal("droplet.png"));
+        image = new Texture(Gdx.files.internal("droplet.png"));
     }
 
-
-    public Texture getDropImage() {
-        return dropImage;
+    public Texture getImage() {
+        return image;
     }
 
-    public void setDropImage(Texture dropImage) {
-        this.dropImage = dropImage;
+    public void setImage(Texture image) {
+        this.image = image;
     }
 
     public Rectangle getRectangle() {
-        return drop;
+        return rectangle;
     }
 
-    public void setDrop(Rectangle drop) {
-        this.drop = drop;
+    public void setRectangle(Rectangle rectangle) {
+        this.rectangle = rectangle;
     }
 }
