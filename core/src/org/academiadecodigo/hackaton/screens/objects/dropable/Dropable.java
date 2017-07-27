@@ -13,8 +13,7 @@ public class Dropable {
     private boolean depressed = false;
 
     public Texture getImage() {
-        return happyDropableImage;
-        //return depressed ? depressedDropableImage : happyDropableImage;
+        return depressed ? depressedDropableImage : happyDropableImage;
     }
 
     public void setHappyDropableImage(Texture dropImage) {

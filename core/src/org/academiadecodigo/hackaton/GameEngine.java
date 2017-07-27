@@ -13,6 +13,11 @@ public class GameEngine extends Game {
 	public static int WIDTH;
 	public static int HEIGHT;
 
+	public GameEngine() {
+		WIDTH = 480;
+		HEIGHT = 800;
+	}
+
 	public GameEngine(int width, int height) {
 		this.WIDTH = width;
 		this.HEIGHT = height;
