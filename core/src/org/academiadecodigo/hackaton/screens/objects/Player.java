@@ -11,7 +11,7 @@ import static org.academiadecodigo.hackaton.screens.GameScreen.SCREEN_SIZE_X;
  * Created by codecadet on 27/07/2017.
  */
 
-public class Bucket {
+public class Player {
 
     private Texture bucketImage;
     private Rectangle bucket;

@@ -18,8 +18,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
 import org.academiadecodigo.hackaton.GameEngine;
-import org.academiadecodigo.hackaton.screens.objects.Bucket;
-import org.academiadecodigo.hackaton.screens.objects.Drop;
+import org.academiadecodigo.hackaton.screens.objects.Player;
+import org.academiadecodigo.hackaton.screens.objects.dropable.Dropable;
 
 
 public class GameScreen implements Screen {
@@ -34,14 +34,14 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private OrthographicCamera camera;
 
-    private Array<Drop> raindrops;
+    private Array<Dropable> raindrops;
     private long lastDropTime;
 
     private Texture backGroundImage;
     private Rectangle backGround;
 
-    private Bucket bucket;
-    private Drop drop;
+    private Player bucket;
+    private Dropable drop;
 
     public final static int SCREEN_SIZE_X = 600;
     public final static int SCREEN_SIZE_Y = 480;
@@ -62,8 +62,8 @@ public class GameScreen implements Screen {
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
         rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
 
-        drop = new Drop();
-        bucket = new Bucket();
+        drop = new Dropable();
+        bucket = new Player();
     }
 
     @Override
@@ -89,13 +89,13 @@ public class GameScreen implements Screen {
         backGround.height = SCREEN_SIZE_Y;
 
         // create the raindrops array and spawn the first raindrop
-        raindrops = new Array<Drop>();
+        raindrops = new Array<Dropable>();
         spawnRaindrop();
     }
 
     private void spawnRaindrop() {
 
-        Drop raindrop = new Drop();
+        Dropable raindrop = new Dropable();
         raindrop.create();
         raindrop.getRectangle().x = MathUtils.random(0, SCREEN_SIZE_X - 64);
         raindrop.getRectangle().y = SCREEN_SIZE_Y;
@@ -131,7 +131,7 @@ public class GameScreen implements Screen {
         batch.begin();
         batch.draw(backGroundImage, backGround.x, backGround.y);
 
-        for (Drop raindrop : raindrops) {
+        for (Dropable raindrop : raindrops) {
             batch.draw(drop.getDropImage(),
                     raindrop.getRectangle().x,
                     raindrop.getRectangle().y);
@@ -145,7 +145,7 @@ public class GameScreen implements Screen {
         batch.begin();
         batch.draw(bucket.getBucketImage(), bucket.getRectangle().x, bucket.getRectangle().y);
 
-        for (Drop raindrop : raindrops) {
+        for (Dropable raindrop : raindrops) {
 
             batch.draw(drop.getDropImage(), raindrop.getRectangle().x, raindrop.getRectangle().y);
         }
@@ -188,10 +188,10 @@ public class GameScreen implements Screen {
         // move the raindrops, remove any that are beneath the bottom edge of
         // the screen or that hit the bucket. In the later case we play back
         // a sound effect as well.
-        Iterator<Drop> iter = raindrops.iterator();
+        Iterator<Dropable> iter = raindrops.iterator();
         while (iter.hasNext()) {
 
-            Drop raindrop = iter.next();
+            Dropable raindrop = iter.next();
             raindrop.getRectangle().y -= MOVE_SPEED * Gdx.graphics.getDeltaTime();
 
             if (raindrop.getRectangle().y + 64 < 0) {
