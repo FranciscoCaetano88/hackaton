@@ -32,7 +32,7 @@ public class GameScreen implements Screen {
     private Score score;
 
     private Sound dropSound;
-    private Music rainMusic;
+    private Music music;
     private SpriteBatch batch;
     private OrthographicCamera camera;
 
@@ -42,9 +42,8 @@ public class GameScreen implements Screen {
     private Texture backGroundImage;
     private Rectangle backGround;
 
-    private Dropable drop;
-
     private Player player;
+
 
     public final static int SCREEN_SIZE_X = 600;
     public final static int SCREEN_SIZE_Y = 480;
@@ -61,12 +60,12 @@ public class GameScreen implements Screen {
         // load the images for the droplet and the player, 64x64 pixels each
         backGroundImage = new Texture(Gdx.files.internal("sad_kitten.jpeg"));
 
-        // load the drop sound effect and the rain background "music"
+        // load the dropable sound effect and the rain background "music"
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
-        rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("The Rolling Stones - Paint it black.mp3"));
 
-        drop = new Dropable();
         score = new Score();
+
         player = new Player();
     }
 
@@ -74,11 +73,11 @@ public class GameScreen implements Screen {
     public void show() {
 
         player.create();
-        //drop.create();
+
 
         // start the playback of the background music immediately
-        rainMusic.setLooping(true);
-        rainMusic.play();
+        music.setLooping(true);
+        music.play();
 
         // create the camera and the SpriteBatch
         camera = new OrthographicCamera();
@@ -94,6 +93,7 @@ public class GameScreen implements Screen {
 
         // create the dropables array and spawn the first raindrop
         dropables = new Array<Dropable>();
+
         spawnRaindrop();
 
     }
@@ -107,6 +107,7 @@ public class GameScreen implements Screen {
         dropable.getRectangle().width = 64;
         dropable.getRectangle().height = 64;
         dropables.add(dropable);
+
         lastDropTime = TimeUtils.nanoTime();
     }
 
@@ -131,17 +132,14 @@ public class GameScreen implements Screen {
 
         batch.begin();
         batch.draw(backGroundImage, backGround.x, backGround.y);
-        game.getFont().draw(game.getBatch(), "Drops Collected: " + dropsGathered, 0, 480);
 
         batch.end();
 
         batch.begin();
         //batch.draw(backGroundImage, backGround.x, backGround.y);
 
-
         for (Dropable dropable : dropables) {
-            batch.draw(
-                    dropable.getImage(),
+            batch.draw(dropable.getImage(),
 
                     dropable.getRectangle().x,
                     dropable.getRectangle().y);
@@ -160,6 +158,7 @@ public class GameScreen implements Screen {
         for (Dropable dropable : dropables) {
 
             batch.draw(dropable.getImage(), dropable.getRectangle().x, dropable.getRectangle().y);
+
         }
 
         batch.end();
@@ -245,10 +244,9 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         // dispose of all the native resources
-        drop.getImage().dispose();
         player.getBucketImage().dispose();
         dropSound.dispose();
-        rainMusic.dispose();
+        music.dispose();
         batch.dispose();
 
         backGroundImage.dispose();
