@@ -20,7 +20,7 @@ public class MainMenuScreen implements Screen {
         this.gameEngine = gameEngine;
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
+        camera.setToOrtho(false, GameEngine.WIDTH, GameEngine.HEIGHT);
 
         texture = new Texture(Gdx.files.internal("mainScreenBackground.jpg"));
     }

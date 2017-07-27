@@ -10,6 +10,14 @@ public class GameEngine extends Game {
 	private BitmapFont font;
 	private SpriteBatch batch;
 
+	public static int WIDTH;
+	public static int HEIGHT;
+
+	public GameEngine(int width, int height) {
+		this.WIDTH = width;
+		this.HEIGHT = height;
+	}
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
