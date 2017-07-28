@@ -144,14 +144,21 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
 
         //batch.begin();
+        //batch.setColor(0.05f,0.05f,0.05f,0.8f);
+        batch.setColor(0.25f,0.25f,0.25f,0.8f);
+
 
         batch.begin();
         batch.draw(backGroundImage, 0, 0);
         batch.end();
 
+        batch.setColor(255,255,255,0.5f);
+
+
         score.draw();
 
 
+        batch.setColor(1,1,1,1);
         batch.begin();
         //batch.draw(backGroundImage, backGround.x, backGround.y);
 
@@ -181,11 +188,14 @@ public class GameScreen implements Screen {
 
         batch.end();
 
+
         if(Gdx.app.getType() == Application.ApplicationType.Desktop) {
 
             //TODO: Change the fog on desktop: it's made of 3 different images, and should be only one
             fog.draw();
         }
+
+        //fog.draw();
 
         handleInput();
 

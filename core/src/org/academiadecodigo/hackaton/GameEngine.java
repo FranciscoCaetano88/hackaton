@@ -47,6 +47,7 @@ public class GameEngine extends Game {
 	}
 
 	public SpriteBatch getBatch() {
+		batch.setColor(1,1,1,1);
 		return batch;
 	}
 

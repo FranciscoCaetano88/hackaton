@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import org.academiadecodigo.hackaton.GameEngine;
 
@@ -13,20 +14,24 @@ public class MainMenuScreen implements Screen {
 
     private final GameEngine gameEngine;
 
-    private Texture texture;
+    private Texture background;
     private Texture glassEffect;
     private Music music;
+
+    private SpriteBatch glassBatch;
 
     private OrthographicCamera camera;
 
     public MainMenuScreen(final GameEngine gameEngine) {
         this.gameEngine = gameEngine;
 
+        glassBatch = new SpriteBatch();
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, GameEngine.WIDTH, GameEngine.HEIGHT);
 
-        texture = new Texture(Gdx.files.internal("beg_screen.jpg"));
-        glassEffect = new Texture(Gdx.files.internal("glass_effect.png"));
+        background = new Texture(Gdx.files.internal("beg_screen.jpg"));
+        glassEffect = new Texture(Gdx.files.internal("glass_effect.jpg"));
         music = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
 
     }
@@ -50,10 +55,14 @@ public class MainMenuScreen implements Screen {
         gameEngine.getBatch().setProjectionMatrix(camera.combined);
 
         gameEngine.getBatch().begin();
-        gameEngine.getBatch().draw(texture, 0, 0);
-        gameEngine.getBatch().draw(glassEffect, 0, 0);
+        gameEngine.getBatch().draw(background, 0, 0);
         gameEngine.getBatch().end();
 
+
+        glassBatch.begin();
+        glassBatch.setColor(1f,1f,1f,0.25f);
+        glassBatch.draw(glassEffect, 0, 0);
+        glassBatch.end();
 
         if (Gdx.input.isTouched()) {
             dispose();
@@ -84,7 +93,7 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        texture.dispose();
+        background.dispose();
         music.dispose();
     }
 }
