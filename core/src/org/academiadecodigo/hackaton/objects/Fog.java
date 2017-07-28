@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Fog {
 
-    private final int MIN_X = 610 - 480;
+    private final int MIN_X = 800 - 480;
 
     private Texture texture;
     private SpriteBatch fogBatch;
@@ -28,7 +28,7 @@ public class Fog {
         movingRight = true;
         fogBatch = new SpriteBatch();
         fogBatch.setColor(Color.GRAY);
-        rectangle = new Rectangle(-MIN_X,initialY,610,343);
+        rectangle = new Rectangle(-MIN_X,initialY,800,800);
 
         texture = new Texture(Gdx.files.internal("fog.png"));
         draw();

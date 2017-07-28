@@ -18,12 +18,12 @@ public class Message extends Actor {
 
     public void draw(SpriteBatch batch, BitmapFont font, float delta, int x, int y) {
 
-        font.getData().setScale(1.5f);
+        font.getData().setScale(1.2f);
 
         fadeElapsed += delta;
         float fade = Interpolation.fade.apply(fadeElapsed / FADE_IN_TIME);
 
-        font.setColor(0, 0, 0, fade);
+        font.setColor(1, 1, 1, fade);
         font.draw(batch, message, x, y, 400, 20, true);
     }
 
