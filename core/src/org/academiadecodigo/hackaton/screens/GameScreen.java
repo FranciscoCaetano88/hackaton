@@ -319,7 +319,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
-
         dispose();
     }
 
@@ -333,8 +332,6 @@ public class GameScreen implements Screen {
 
         //batch.dispose();
         backGroundImage.dispose();
-
-        player.getImage().dispose();
 
         doorTexture.dispose();
     }
