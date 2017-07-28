@@ -36,7 +36,7 @@ public class GameScreen implements Screen {
     private final int DOOR_POSITION_X = 240 /2;
     private final int DOOR_POSITION_Y = 400 /2;
 
-    private final double PRODUCTION_RATE = 3;// dropables per second
+    private final double PRODUCTION_RATE = 2;// dropables per second
 
     private final GameEngine gameEngine;
 
@@ -158,7 +158,6 @@ public class GameScreen implements Screen {
 
         batch.end();
 
-
         score.updateScoreBar();
 
         // begin a new batch and draw the player and
@@ -181,15 +180,21 @@ public class GameScreen implements Screen {
 
     private void checkScore() {
 
+        System.out.println(score.getScore());
 
         if (score.getScore() == 0) {
+
             gameEngine.setScreen(new EndScreen(gameEngine,"positive_end.jpg"));
+            dispose();
+
+            return;
         }
 
-
         //TODO: Implement the timer to set the end of game
-        if (score.getScore() == 120) {
+        if (score.getScore() == 240) {
+
             gameEngine.setScreen(new EndScreen(gameEngine,"negative_end.jpg"));
+            dispose();
         }
 
     }
@@ -319,12 +324,17 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+
         // dispose of all the native resources
-        player.getImage().dispose();
         dropSound.dispose();
         music.dispose();
-        batch.dispose();
+        score.dispose();
 
+        //batch.dispose();
         backGroundImage.dispose();
+
+        player.getImage().dispose();
+
+        doorTexture.dispose();
     }
 }

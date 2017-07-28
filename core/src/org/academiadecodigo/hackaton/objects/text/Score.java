@@ -20,7 +20,7 @@ public class Score {
     private Texture doorImage;
 
     public Score() {
-        score = SCREEN_SIZE_X / 4;
+        score = SCREEN_SIZE_X / 8;
 
         doorImage = new Texture(Gdx.files.internal("beg_screen.jpg"));
 
@@ -67,5 +67,10 @@ public class Score {
         if (score < 0) {
             score = 0;
         }
+    }
+
+    public void dispose() {
+
+//        shapeRenderer.dispose();
     }
 }
