@@ -188,6 +188,8 @@ public class GameScreen implements Screen {
         batch.end();
 
         if(Gdx.app.getType() == Application.ApplicationType.Desktop) {
+
+            //TODO: Change the fog on desktop: it's made of 3 different images, and should be only one
             fog0.draw();
             fog1.draw();
             fog2.draw();
@@ -211,7 +213,6 @@ public class GameScreen implements Screen {
             return;
         }
 
-        //TODO: Implement the timer to set the end of game
         if (score.getScore() >= 240) {
 
             gameEngine.setScreen(new EndScreen(gameEngine, "sad_end.jpg"));
@@ -233,7 +234,8 @@ public class GameScreen implements Screen {
             Vector3 touchPos2 = new Vector3();
             touchPos2.set(Gdx.input.getX(1), Gdx.input.getY(1), 0);
 
-            camera.unproject(touchPos); //TODO: Check if it's really necessary
+            camera.unproject(touchPos);
+
 
             if (touchPos.y < 100) {
 

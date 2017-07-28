@@ -37,7 +37,7 @@ public class InputManager implements InputProcessor {
         Vector3 touchPos = new Vector3();
         touchPos.set(screenX, screenY, 0);
 
-        game.getCamera().unproject(touchPos); //TODO: Check if it's really necessary
+        game.getCamera().unproject(touchPos);
 
         if (touchPos.y < 100) {
             game.getPlayer().getRectangle().x = touchPos.x - 64 / 2;

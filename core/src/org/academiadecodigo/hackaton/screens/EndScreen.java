@@ -13,7 +13,7 @@ public class EndScreen implements Screen {
 
     private final GameEngine game;
     private Texture backGroundImage;
-    private Music music;//TODO: music for initial screen, and if possible Chiquinho uma animação
+    private Music music;//TODO: music for initial screen, and if possible @Chiquinho uma animação
 
     public EndScreen(GameEngine game, String path) {
         this.game = game;
