@@ -1,5 +1,6 @@
 package org.academiadecodigo.hackaton.objects.text;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,10 +17,12 @@ public class Score {
     private int score;
     private SpriteBatch doorBatch;
     private ShapeRenderer shapeRenderer;
-    private Texture texture;
+    private Texture doorImage;
 
     public Score() {
         score = SCREEN_SIZE_X / 4;
+
+        doorImage = new Texture(Gdx.files.internal("beg_screen.jpg"));
 
         shapeRenderer = new ShapeRenderer();
 
@@ -43,6 +46,8 @@ public class Score {
     }
 
     public void updateScoreBar() {
+
+
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.BLACK);
