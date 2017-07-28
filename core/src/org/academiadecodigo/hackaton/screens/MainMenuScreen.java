@@ -1,5 +1,6 @@
 package org.academiadecodigo.hackaton.screens;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
@@ -9,6 +10,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import org.academiadecodigo.hackaton.GameEngine;
+
+import java.awt.Desktop;
 
 public class MainMenuScreen implements Screen {
 
@@ -60,8 +63,10 @@ public class MainMenuScreen implements Screen {
 
 
         glassBatch.begin();
-        glassBatch.setColor(1f,1f,1f,0.25f);
-        glassBatch.draw(glassEffect, 0, 0);
+        if(Gdx.app.getType() == Application.ApplicationType.Desktop) {
+            glassBatch.setColor(1f,1f,1f,0.25f);
+            glassBatch.draw(glassEffect, 0, 0);
+        }
         glassBatch.end();
 
         if (Gdx.input.isTouched()) {

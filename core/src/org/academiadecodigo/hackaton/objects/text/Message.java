@@ -1,9 +1,13 @@
 package org.academiadecodigo.hackaton.objects.text;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+
+import java.awt.Desktop;
 
 public class Message extends Actor {
 
@@ -18,7 +22,11 @@ public class Message extends Actor {
 
     public void draw(SpriteBatch batch, BitmapFont font, float delta, int x, int y) {
 
-        font.getData().setScale(1.2f);
+        if(Gdx.app.getType() == Application.ApplicationType.Desktop) {
+            font.getData().setScale(1.2f);
+        } else {
+            font.getData().setScale(1.5f);
+        }
 
         fadeElapsed += delta;
         float fade = Interpolation.fade.apply(fadeElapsed / FADE_IN_TIME);
