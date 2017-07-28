@@ -74,7 +74,7 @@ public class GameScreen implements Screen {
 
 
         // load the images for the droplet and the player, 64x64 pixels each
-        backGroundImage = new Texture(Gdx.files.internal("game_background.jpg"));
+        backGroundImage = new Texture(Gdx.files.internal("empty_room_in_olback_house.jpg"));
 
         // load the dropable sound effect and the rain background "music"
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
