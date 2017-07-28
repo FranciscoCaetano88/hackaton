@@ -242,6 +242,7 @@ public class GameScreen implements Screen {
 
             //player.getRectangle().x = touchPos.x - 64 / 2;
         }
+*/
 
         if (Gdx.input.isKeyPressed(Keys.LEFT)) {
             player.getRectangle().x -= MOVE_SPEED * Gdx.graphics.getDeltaTime();
@@ -260,7 +261,6 @@ public class GameScreen implements Screen {
         if (player.getRectangle().x > SCREEN_SIZE_X - 64) {
             player.getRectangle().x = SCREEN_SIZE_X - 64;
         }
-*/
         // check if we need to create a new raindrop
         if (TimeUtils.nanoTime() - lastDropTime > (1000000000 / PRODUCTION_RATE)) {
             player.changeImage();

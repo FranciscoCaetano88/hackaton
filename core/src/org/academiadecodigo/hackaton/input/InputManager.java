@@ -7,9 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 
 import org.academiadecodigo.hackaton.screens.GameScreen;
 
-/**
- * Created by codecadet on 28/07/17.
- */
+import static com.badlogic.gdx.Gdx.input;
 
 public class InputManager implements InputProcessor {
 
@@ -21,30 +19,12 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (Gdx.input.isKeyPressed(keycode)) {
-            game.getPlayer().getRectangle().x -= GameScreen.MOVE_SPEED * Gdx.graphics.getDeltaTime();
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            game.getPlayer().getRectangle().x += GameScreen.MOVE_SPEED * Gdx.graphics.getDeltaTime();
-        }
-
-        // make sure the player stays within the screen bounds
-        if (game.getPlayer().getRectangle().x < 0) {
-            game.getPlayer().getRectangle().x = 0;
-        }
-
-        // make sure the player stays within the screen bounds
-        if (game.getPlayer().getRectangle().x > GameScreen.SCREEN_SIZE_X - 64) {
-            game.getPlayer().getRectangle().x = GameScreen.SCREEN_SIZE_X - 64;
-        }
-
         return true;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        return false;
+        return true;
     }
 
     @Override
@@ -55,10 +35,7 @@ public class InputManager implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector3 touchPos = new Vector3();
-        touchPos.set(Gdx.input.getX(0), Gdx.input.getY(0), 0);
-
-        Vector3 touchPos2 = new Vector3();
-        touchPos2.set(Gdx.input.getX(1), Gdx.input.getY(1), 0);
+        touchPos.set(screenX, screenY, 0);
 
         game.getCamera().unproject(touchPos); //TODO: Check if it's really necessary
 
@@ -72,7 +49,9 @@ public class InputManager implements InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         Vector3 touchPos = new Vector3();
-        touchPos.set(Gdx.input.getX(0), Gdx.input.getY(0), 0);
+        touchPos.set(input.getX(pointer), input.getY(pointer), 0);
+
+        game.getCamera().unproject(touchPos);
 
         game.checkMouseClick(touchPos);
         return true;
