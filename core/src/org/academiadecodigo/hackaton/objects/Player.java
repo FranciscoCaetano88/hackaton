@@ -16,7 +16,7 @@ public class Player {
     private Texture bucketImage;
     private Rectangle bucket;
 
-    public void create(){
+    public  Player(){
 
         bucketImage = new Texture(Gdx.files.internal("player.png"));
 

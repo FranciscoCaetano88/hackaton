@@ -10,11 +10,11 @@ import org.academiadecodigo.hackaton.GameEngine;
 
 public class MainMenuScreen implements Screen {
 
-    final GameEngine gameEngine;
+    private final GameEngine gameEngine;
 
-    Texture texture;
+    private Texture texture;
 
-    OrthographicCamera camera;
+    private OrthographicCamera camera;
 
     public MainMenuScreen(final GameEngine gameEngine) {
         this.gameEngine = gameEngine;
@@ -40,7 +40,7 @@ public class MainMenuScreen implements Screen {
 
         gameEngine.getBatch().begin();
         gameEngine.getBatch().draw(texture, 0, 0);
-        gameEngine.getFont().draw(gameEngine.getBatch(), "Start", 100, 400);
+        gameEngine.getFont().draw(gameEngine.getBatch(), "Start", 100, 400);//TODO: get this to work
         gameEngine.getBatch().end();
 
         if (Gdx.input.isTouched()) {

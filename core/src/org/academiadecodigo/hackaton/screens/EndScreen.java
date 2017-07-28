@@ -20,19 +20,20 @@ public class EndScreen implements Screen {
     private Sound dropSound;
     private Music music;
 
-    public EndScreen(GameEngine game) {
+    public EndScreen(GameEngine game, String path) {
         this.game = game;
+        this.backGroundImage= new Texture(Gdx.files.internal(path));
         init();
     }
 
     private void init() {
 
-        // load the images for the droplet and the player, 64x64 pixels each
-        backGroundImage = new Texture(Gdx.files.internal("game_background.jpg"));
-
-
         // load the dropable sound effect and the rain background "music"
         music = Gdx.audio.newMusic(Gdx.files.internal("The Rolling Stones - Paint it black.mp3"));
+
+        game.getBatch().begin();
+        game.getBatch().draw(backGroundImage,0,0);
+        game.getBatch().end();
 
     }
 

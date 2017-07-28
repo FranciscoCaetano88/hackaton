@@ -22,6 +22,7 @@ import org.academiadecodigo.hackaton.GameEngine;
 import org.academiadecodigo.hackaton.objects.dropable.Dropable;
 import org.academiadecodigo.hackaton.objects.dropable.DropableFactory;
 import org.academiadecodigo.hackaton.objects.text.Score;
+import org.academiadecodigo.hackaton.objects.Player;
 
 
 public class GameScreen implements Screen {
@@ -32,11 +33,14 @@ public class GameScreen implements Screen {
     private final int MOVE_SPEED = 400;
     private final int DROP_SPEED = 300;
 
+    private final int DOOR_POSITION_X = 240 /2;
+    private final int DOOR_POSITION_Y = 400 /2;
+
     private final double PRODUCTION_RATE = 3;// dropables per second
 
-    private final GameEngine game;
+    private final GameEngine gameEngine;
 
-    private org.academiadecodigo.hackaton.objects.text.Score score;
+    private Score score;
 
     private Sound dropSound;
     private Music music;
@@ -47,14 +51,14 @@ public class GameScreen implements Screen {
     private long lastDropTime;
 
     private Texture backGroundImage;
-    private Rectangle backGround;
+    //private Rectangle backGround;
 
-    private org.academiadecodigo.hackaton.objects.Player player;
-    private Texture door;
+    private Player player;
+    private Texture doorTexture;
 
 
-    public GameScreen(GameEngine game) {
-        this.game = game;
+    public GameScreen(GameEngine gameEngine) {
+        this.gameEngine = gameEngine;
         init();
     }
 
@@ -62,8 +66,7 @@ public class GameScreen implements Screen {
 
         // load the images for the droplet and the player, 64x64 pixels each
         backGroundImage = new Texture(Gdx.files.internal("game_background.jpg"));
-
-        door = new Texture(Gdx.files.internal("red_door.jpg"));
+        doorTexture = new Texture(Gdx.files.internal("red_door.jpg"));
 
         // load the dropable sound effect and the rain background "music"
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
@@ -71,13 +74,11 @@ public class GameScreen implements Screen {
 
         score = new Score();
 
-        player = new org.academiadecodigo.hackaton.objects.Player();
+        player = new Player();
     }
 
     @Override
     public void show() {
-
-        player.create();
 
         // start the playback of the background music immediately
         music.setLooping(true);
@@ -86,22 +87,24 @@ public class GameScreen implements Screen {
         // create the camera and the SpriteBatch
         camera = new OrthographicCamera();
         camera.setToOrtho(false, SCREEN_SIZE_X, SCREEN_SIZE_Y);
-        batch = game.getBatch();
+        batch = gameEngine.getBatch();
 
+        /*
         // create a Rectangle to logically represent the player
         backGround = new Rectangle();
         backGround.x = 0;
         backGround.y = 0;
         backGround.width = SCREEN_SIZE_X;
         backGround.height = SCREEN_SIZE_Y;
+        */
 
         // create the dropables array and spawn the first raindrop
         dropables = new Array<Dropable>();
 
-        spawnRaindrop();
+        spawnDropable();
     }
 
-    private void spawnRaindrop() {
+    private void spawnDropable() {
 
         Dropable dropable = DropableFactory.generateDropable();
 
@@ -109,6 +112,7 @@ public class GameScreen implements Screen {
         dropable.getRectangle().y = SCREEN_SIZE_Y;
         dropable.getRectangle().width = 64;
         dropable.getRectangle().height = 64;
+
         dropables.add(dropable);
 
         lastDropTime = TimeUtils.nanoTime();
@@ -124,7 +128,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // tell the camera to update its matrices.
+        // tell the camera to handleInput its matrices.
         camera.update();
 
         // tell the SpriteBatch to render in the
@@ -134,7 +138,12 @@ public class GameScreen implements Screen {
         //batch.begin();
 
         batch.begin();
-        batch.draw(backGroundImage, backGround.x, backGround.y);
+        batch.draw(backGroundImage, 0, 0);
+        batch.end();
+
+        batch.begin();//TODO:Joao faz o fading
+        //batch.setColor(0.5f,0.5f,0.5f,1F);
+        batch.draw(doorTexture, DOOR_POSITION_X, DOOR_POSITION_Y);
         batch.end();
 
         batch.begin();
@@ -149,11 +158,6 @@ public class GameScreen implements Screen {
 
         batch.end();
 
-        batch.begin();
-
-        //batch.setColor(0.5f,0.5f,0.5f,1F);
-        batch.draw(door, 240 / 2, 400 / 2);
-        batch.end();
 
         score.updateScoreBar();
 
@@ -170,12 +174,28 @@ public class GameScreen implements Screen {
 
         batch.end();
 
-        update();
+        handleInput();
+
+        checkScore();
+    }
+
+    private void checkScore() {
+
+
+        if (score.getScore() == 0) {
+            gameEngine.setScreen(new EndScreen(gameEngine,"positive_end.jpg"));
+        }
+
+
+        //TODO: Implement the timer to set the end of game
+        if (score.getScore() == 120) {
+            gameEngine.setScreen(new EndScreen(gameEngine,"negative_end.jpg"));
+        }
+
     }
 
 
-
-    public void update() {
+    public void handleInput() {
 
         // process user input
         if (Gdx.input.isTouched()) {
@@ -187,9 +207,7 @@ public class GameScreen implements Screen {
             Vector3 touchPos2 = new Vector3();
             touchPos2.set(Gdx.input.getX(1), Gdx.input.getY(1), 0);
 
-            System.out.println(touchPos2.x + " <--x  y--> " + touchPos2.y);
-
-            camera.unproject(touchPos);
+            camera.unproject(touchPos); //TODO: Check if it's really necessary
 
             if (touchPos.y < 100) {
 
@@ -215,6 +233,7 @@ public class GameScreen implements Screen {
             player.getRectangle().x = 0;
         }
 
+        // make sure the player stays within the screen bounds
         if (player.getRectangle().x > SCREEN_SIZE_X - 64) {
             player.getRectangle().x = SCREEN_SIZE_X - 64;
         }
@@ -222,7 +241,7 @@ public class GameScreen implements Screen {
         // check if we need to create a new raindrop
         if (TimeUtils.nanoTime() - lastDropTime > (1000000000 / PRODUCTION_RATE)) {
 
-            spawnRaindrop();
+            spawnDropable();
         }
 
         // move the dropables, remove any that are beneath the bottom edge of
