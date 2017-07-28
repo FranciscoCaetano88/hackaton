@@ -237,11 +237,12 @@ public class GameScreen implements Screen {
             camera.unproject(touchPos);
 
 
+            /*
             if (touchPos.y < 100) {
-
                 player.getRectangle().x = touchPos.x - 64 / 2;
             }
 
+            gi*/
             checkMouseClick(touchPos);
 
             //player.getRectangle().x = touchPos.x - 64 / 2;
