@@ -2,6 +2,7 @@ package org.academiadecodigo.hackaton.screens;
 
 import java.util.Iterator;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
@@ -87,7 +88,7 @@ public class GameScreen implements Screen {
 
         player = new Player();
 
-        Gdx.input.setInputProcessor(new InputManager(this));
+        //Gdx.input.setInputProcessor(new InputManager(this));
     }
 
     @Override
@@ -186,9 +187,11 @@ public class GameScreen implements Screen {
 
         batch.end();
 
-        fog0.draw();
-        fog1.draw();
-        fog2.draw();
+        if(Gdx.app.getType() == Application.ApplicationType.Desktop) {
+            fog0.draw();
+            fog1.draw();
+            fog2.draw();
+        }
 
         handleInput();
 
@@ -220,7 +223,6 @@ public class GameScreen implements Screen {
 
 
     public void handleInput() {
-/*
         // process user input
         if (Gdx.input.isTouched()) {
 
@@ -242,7 +244,6 @@ public class GameScreen implements Screen {
 
             //player.getRectangle().x = touchPos.x - 64 / 2;
         }
-*/
 
         if (Gdx.input.isKeyPressed(Keys.LEFT)) {
             player.getRectangle().x -= MOVE_SPEED * Gdx.graphics.getDeltaTime();
