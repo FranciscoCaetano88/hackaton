@@ -19,7 +19,7 @@ public class Score {
     private Texture texture;
 
     public Score() {
-        score = SCREEN_SIZE_X / 4;
+        score = SCREEN_SIZE_X / 8;
 
         shapeRenderer = new ShapeRenderer();
 
@@ -62,5 +62,10 @@ public class Score {
         if (score < 0) {
             score = 0;
         }
+    }
+
+    public void dispose() {
+
+//        shapeRenderer.dispose();
     }
 }
