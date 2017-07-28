@@ -80,6 +80,7 @@ public class GameScreen implements Screen {
         music = Gdx.audio.newMusic(Gdx.files.internal("The Rolling Stones - Paint it black.mp3"));
 
         score = new Score();
+
         fog0 = new Fog(0);
         fog1= new Fog(343);
         fog2 = new Fog(686);
@@ -201,6 +202,7 @@ public class GameScreen implements Screen {
         if (score.getScore() == 0) {
 
             gameEngine.setScreen(new EndScreen(gameEngine, "happy_end.png"));
+
             dispose();
 
             return;
@@ -211,6 +213,7 @@ public class GameScreen implements Screen {
 
             gameEngine.setScreen(new EndScreen(gameEngine, "sad_end.jpg"));
             dispose();
+
         }
 
     }

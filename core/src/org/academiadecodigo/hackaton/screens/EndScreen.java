@@ -13,7 +13,7 @@ public class EndScreen implements Screen {
 
     private final GameEngine game;
     private Texture backGroundImage;
-    private Music music;
+    private Music music;//TODO: music for initial screen, and if possible Chiquinho uma animação
 
     public EndScreen(GameEngine game, String path) {
         this.game = game;
@@ -44,8 +44,15 @@ public class EndScreen implements Screen {
 
         if(Gdx.input.isTouched()) {
             dispose();
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             game.setScreen(new MainMenuScreen(game));
         }
+
     }
 
     @Override

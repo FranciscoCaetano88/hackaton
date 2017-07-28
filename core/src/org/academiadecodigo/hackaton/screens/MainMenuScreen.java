@@ -47,6 +47,7 @@ public class MainMenuScreen implements Screen {
             dispose();
             gameEngine.setScreen(new GameScreen(gameEngine));
         }
+
     }
 
     @Override
