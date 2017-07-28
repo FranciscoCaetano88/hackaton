@@ -42,7 +42,7 @@ public class GameScreen implements Screen {
 
     private Score score;
 
-    private Sound dropSound;
+    private Sound happyCatchSound;
     private Music music;
     private SpriteBatch batch;
     private OrthographicCamera camera;
@@ -58,8 +58,8 @@ public class GameScreen implements Screen {
     private Fog fog;
 
 
-
     private Message message = MessageFactory.generateMessage();
+    private Sound sadCatchSound;
 
     public GameScreen(GameEngine gameEngine) {
         this.gameEngine = gameEngine;
@@ -73,7 +73,9 @@ public class GameScreen implements Screen {
         backGroundImage = new Texture(Gdx.files.internal("game_background.jpg"));
 
         // load the dropable sound effect and the rain background "music"
-        dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
+        happyCatchSound = Gdx.audio.newSound(Gdx.files.internal("yay.wav"));
+        sadCatchSound = Gdx.audio.newSound(Gdx.files.internal("sigh.mp3"));
+
         music = Gdx.audio.newMusic(Gdx.files.internal("The Rolling Stones - Paint it black.mp3"));
 
         score = new Score();
@@ -90,6 +92,7 @@ public class GameScreen implements Screen {
 
         // start the playback of the background music immediately
         music.setLooping(true);
+        music.setVolume(0.45f);
         music.play();
 
         // create the camera and the SpriteBatch
@@ -145,20 +148,20 @@ public class GameScreen implements Screen {
 
         //batch.begin();
         //batch.setColor(0.05f,0.05f,0.05f,0.8f);
-        batch.setColor(0.25f,0.25f,0.25f,0.8f);
+        batch.setColor(0.25f, 0.25f, 0.25f, 0.8f);
 
 
         batch.begin();
         batch.draw(backGroundImage, 0, 0);
         batch.end();
 
-        batch.setColor(255,255,255,0.5f);
+        batch.setColor(255, 255, 255, 0.5f);
 
 
         score.draw();
 
 
-        batch.setColor(1,1,1,1);
+        batch.setColor(1, 1, 1, 1);
         batch.begin();
         //batch.draw(backGroundImage, backGround.x, backGround.y);
 
@@ -189,7 +192,7 @@ public class GameScreen implements Screen {
         batch.end();
 
 
-        if(Gdx.app.getType() == Application.ApplicationType.Desktop) {
+        if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
 
             //TODO: Change the fog on desktop: it's made of 3 different images, and should be only one
             fog.draw();
@@ -269,7 +272,7 @@ public class GameScreen implements Screen {
             spawnDropable();
         }
 
-        if(TimeUtils.millis() - lastMessageTime > 5000) {
+        if (TimeUtils.millis() - lastMessageTime > 5000) {
             message = MessageFactory.generateMessage();
             lastMessageTime = TimeUtils.millis();
         }
@@ -281,7 +284,7 @@ public class GameScreen implements Screen {
         while (iter.hasNext()) {
 
             Dropable dropable = iter.next();
-                dropable.getRectangle().y -= DROP_SPEED * Gdx.graphics.getDeltaTime();
+            dropable.getRectangle().y -= DROP_SPEED * Gdx.graphics.getDeltaTime();
 
             if (dropable.getRectangle().y + 64 < 0) {
 
@@ -290,16 +293,18 @@ public class GameScreen implements Screen {
             }
 
             if (dropable.getRectangle().overlaps(player.getRectangle())) {
-                dropSound.play();
+
                 iter.remove();
 
                 if (dropable.isDepressed()) {
 
+                    happyCatchSound.play();
                     score.incrementScore();
                     score.incrementScore();
 
                 } else {
 
+                    sadCatchSound.play();
                     score.decrementScore();
                     score.decrementScore();
                 }
@@ -351,7 +356,7 @@ public class GameScreen implements Screen {
     public void dispose() {
 
         // dispose of all the native resources
-        dropSound.dispose();
+        happyCatchSound.dispose();
         music.dispose();
         score.dispose();
 
