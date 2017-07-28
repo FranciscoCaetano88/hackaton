@@ -5,19 +5,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.async.ThreadUtils;
 
 import org.academiadecodigo.hackaton.GameEngine;
 
-/**
- * Created by codecadet on 28/07/2017.
- */
-
 public class EndScreen implements Screen {
-
 
     private final GameEngine game;
     private Texture backGroundImage;
-    private Music music;
+    private Music music;//TODO: music for initial screen, and if possible @Chiquinho uma animação
 
     public EndScreen(GameEngine game, String path) {
         this.game = game;
@@ -44,7 +40,19 @@ public class EndScreen implements Screen {
 
         game.getBatch().begin();
         game.getBatch().draw(backGroundImage, 0, 0);
-        game.getBatch().end();;
+        game.getBatch().end();
+
+        if(Gdx.input.isTouched()) {
+            dispose();
+
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            game.setScreen(new MainMenuScreen(game));
+        }
+
     }
 
     @Override

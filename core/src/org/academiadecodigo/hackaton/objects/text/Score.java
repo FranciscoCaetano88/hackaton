@@ -1,11 +1,12 @@
 package org.academiadecodigo.hackaton.objects.text;
 
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import static org.academiadecodigo.hackaton.screens.GameScreen.SCREEN_SIZE_X;
+import static org.academiadecodigo.hackaton.screens.GameScreen.SCREEN_SIZE_Y;
 
 /**
  * Created by codecadet on 27/07/2017.
@@ -13,20 +14,28 @@ import static org.academiadecodigo.hackaton.screens.GameScreen.SCREEN_SIZE_X;
 
 public class Score {
 
+    private final int DOOR_POSITION_X = Gdx.graphics.getWidth() / 2 - 120;
+    private final int DOOR_POSITION_Y = Gdx.graphics.getHeight() / 4;
+
     private int score;
     private SpriteBatch doorBatch;
-    private ShapeRenderer shapeRenderer;
-    private Texture texture;
+    private Texture doorTexture;
+    private float brightness;
+
+    private float green = 0;
+    private float blue = 0;
+    private float alpha = 1f;
 
     public Score() {
+        brightness = 0.75F;
+        doorBatch = new SpriteBatch();
         score = SCREEN_SIZE_X / 8;
 
-        shapeRenderer = new ShapeRenderer();
+        doorTexture = new Texture(Gdx.files.internal("red_door.jpg"));
+        doorBatch.begin();
+        doorBatch.setColor(brightness, green, blue, alpha);
+        doorBatch.end();
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.rect(5, 10, score, 20);
-        shapeRenderer.end();
     }
 
     public int getScore() {
@@ -39,15 +48,18 @@ public class Score {
             return;
         }
 
-        score += 10;
+        brightness -= 0.024;
+        if (brightness < 0.14f) {
+            brightness = 0.14f;
+        }
+
+        score += 5;
     }
 
     public void updateScoreBar() {
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.rect(5, 10, score, 50);
-        shapeRenderer.end();
+        doorBatch.begin();
+        doorBatch.setColor(1f, 0, 0, brightness);
+        doorBatch.end();
     }
 
 
@@ -57,7 +69,12 @@ public class Score {
             return;
         }
 
-        score -= 10;
+        brightness += 0.024;
+        if (brightness > 1f) {
+            brightness = 1f;
+        }
+
+        score -= 5;
 
         if (score < 0) {
             score = 0;
@@ -66,6 +83,12 @@ public class Score {
 
     public void dispose() {
 
-//        shapeRenderer.dispose();
+    }
+
+    public void draw() {
+        doorBatch.begin();
+        doorBatch.setColor(brightness, green, blue, alpha);
+        doorBatch.draw(doorTexture, DOOR_POSITION_X, DOOR_POSITION_Y);
+        doorBatch.end();
     }
 }

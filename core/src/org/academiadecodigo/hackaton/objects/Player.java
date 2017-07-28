@@ -26,8 +26,8 @@ public class Player {
         //rectangle.setX()
         rectangle.x = SCREEN_SIZE_X / 2 - 64 / 2; // center the rectangle horizontally
         rectangle.y = 20; // bottom left corner of the rectangle is 20 pixels above the bottom screen edge
-        rectangle.width = 64;
-        rectangle.height = 64;
+        rectangle.width = (int)(64 * 1.5);
+        rectangle.height = (int)(64 * 1.5);
     }
 
     public Texture getImage() {
@@ -49,7 +49,6 @@ public class Player {
     public void changeImage() {
 
         if (up) {
-
             texture = new Texture(Gdx.files.internal("player.png"));
             up = false;
             return;

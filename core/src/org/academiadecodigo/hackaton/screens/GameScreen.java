@@ -2,8 +2,10 @@ package org.academiadecodigo.hackaton.screens;
 
 import java.util.Iterator;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -19,8 +21,12 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import org.academiadecodigo.hackaton.GameEngine;
 
+import org.academiadecodigo.hackaton.input.InputManager;
+import org.academiadecodigo.hackaton.objects.Fog;
 import org.academiadecodigo.hackaton.objects.dropable.Dropable;
 import org.academiadecodigo.hackaton.objects.dropable.DropableFactory;
+import org.academiadecodigo.hackaton.objects.text.Message;
+import org.academiadecodigo.hackaton.objects.text.MessageFactory;
 import org.academiadecodigo.hackaton.objects.text.Score;
 import org.academiadecodigo.hackaton.objects.Player;
 
@@ -29,11 +35,8 @@ public class GameScreen implements Screen {
     public final static int SCREEN_SIZE_X = GameEngine.WIDTH;
     public final static int SCREEN_SIZE_Y = GameEngine.HEIGHT;
 
-    private final int MOVE_SPEED = 400;
+    public static final int MOVE_SPEED = 400;
     private final int DROP_SPEED = 200;
-
-    private final int DOOR_POSITION_X = 240 / 2;
-    private final int DOOR_POSITION_Y = 400 / 2;
 
     private final double PRODUCTION_RATE = 2;// dropables per second
 
@@ -48,14 +51,19 @@ public class GameScreen implements Screen {
 
     private Array<Dropable> dropables;
     private long lastDropTime;
-    private long lastMoveTime;
-
+    private long lastMessageTime = TimeUtils.millis();
 
     private Texture backGroundImage;
 
     private Player player;
-    private Texture doorTexture;
 
+    private Fog fog0;
+    private Fog fog1;
+    private Fog fog2;
+
+
+
+    private Message message = MessageFactory.generateMessage();
 
     public GameScreen(GameEngine gameEngine) {
         this.gameEngine = gameEngine;
@@ -64,9 +72,9 @@ public class GameScreen implements Screen {
 
     private void init() {
 
+
         // load the images for the droplet and the player, 64x64 pixels each
         backGroundImage = new Texture(Gdx.files.internal("game_background.jpg"));
-        doorTexture = new Texture(Gdx.files.internal("red_door.jpg"));
 
         // load the dropable sound effect and the rain background "music"
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
@@ -74,7 +82,13 @@ public class GameScreen implements Screen {
 
         score = new Score();
 
+        fog0 = new Fog(0);
+        fog1= new Fog(343);
+        fog2 = new Fog(686);
+
         player = new Player();
+
+        //Gdx.input.setInputProcessor(new InputManager(this));
     }
 
     @Override
@@ -116,7 +130,6 @@ public class GameScreen implements Screen {
         dropables.add(dropable);
 
         lastDropTime = TimeUtils.nanoTime();
-        lastMoveTime = TimeUtils.nanoTime();
     }
 
     @Override
@@ -142,9 +155,8 @@ public class GameScreen implements Screen {
         batch.draw(backGroundImage, 0, 0);
         batch.end();
 
-        batch.begin();//TODO:Joao faz o fading
-        batch.draw(doorTexture, DOOR_POSITION_X, DOOR_POSITION_Y);
-        batch.end();
+        score.draw();
+
 
         batch.begin();
         //batch.draw(backGroundImage, backGround.x, backGround.y);
@@ -171,7 +183,17 @@ public class GameScreen implements Screen {
 
         }
 
+        message.draw(batch, gameEngine.getFont(), delta, 20, 760);
+
         batch.end();
+
+        if(Gdx.app.getType() == Application.ApplicationType.Desktop) {
+
+            //TODO: Change the fog on desktop: it's made of 3 different images, and should be only one
+            fog0.draw();
+            fog1.draw();
+            fog2.draw();
+        }
 
         handleInput();
 
@@ -180,28 +202,28 @@ public class GameScreen implements Screen {
 
     private void checkScore() {
 
-        System.out.println(score.getScore());
+        System.out.println("Score: " + score.getScore());
 
         if (score.getScore() == 0) {
 
             gameEngine.setScreen(new EndScreen(gameEngine, "happy_end.png"));
+
             dispose();
 
             return;
         }
 
-        //TODO: Implement the timer to set the end of game
-        if (score.getScore() == 240) {
+        if (score.getScore() >= 240) {
 
             gameEngine.setScreen(new EndScreen(gameEngine, "sad_end.jpg"));
             dispose();
+
         }
 
     }
 
 
     public void handleInput() {
-
         // process user input
         if (Gdx.input.isTouched()) {
 
@@ -212,7 +234,8 @@ public class GameScreen implements Screen {
             Vector3 touchPos2 = new Vector3();
             touchPos2.set(Gdx.input.getX(1), Gdx.input.getY(1), 0);
 
-            camera.unproject(touchPos); //TODO: Check if it's really necessary
+            camera.unproject(touchPos);
+
 
             if (touchPos.y < 100) {
 
@@ -223,7 +246,6 @@ public class GameScreen implements Screen {
 
             //player.getRectangle().x = touchPos.x - 64 / 2;
         }
-
 
         if (Gdx.input.isKeyPressed(Keys.LEFT)) {
             player.getRectangle().x -= MOVE_SPEED * Gdx.graphics.getDeltaTime();
@@ -242,13 +264,16 @@ public class GameScreen implements Screen {
         if (player.getRectangle().x > SCREEN_SIZE_X - 64) {
             player.getRectangle().x = SCREEN_SIZE_X - 64;
         }
-
         // check if we need to create a new raindrop
         if (TimeUtils.nanoTime() - lastDropTime > (1000000000 / PRODUCTION_RATE)) {
             player.changeImage();
             spawnDropable();
         }
 
+        if(TimeUtils.millis() - lastMessageTime > 5000) {
+            message = MessageFactory.generateMessage();
+            lastMessageTime = TimeUtils.millis();
+        }
 
         // move the dropables, remove any that are beneath the bottom edge of
         // the screen or that hit the player. In the later case we play back
@@ -284,7 +309,7 @@ public class GameScreen implements Screen {
         }
     }
 
-    private void checkMouseClick(Vector3 touchPos) {
+    public void checkMouseClick(Vector3 touchPos) {
 
         float x = touchPos.x;
         float y = touchPos.y;
@@ -296,10 +321,11 @@ public class GameScreen implements Screen {
         for (Dropable dropable : dropables) {
 
             if (mouse.overlaps(dropable.getRectangle())) {
-
                 dropable.setDepressed(true);
             }
         }
+
+
     }
 
     @Override
@@ -319,7 +345,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
-
         dispose();
     }
 
@@ -334,8 +359,41 @@ public class GameScreen implements Screen {
         //batch.dispose();
         backGroundImage.dispose();
 
-        player.getImage().dispose();
+    }
 
-        doorTexture.dispose();
+    public GameEngine getGameEngine() {
+        return gameEngine;
+    }
+
+    public Score getScore() {
+        return score;
+    }
+
+    public void setScore(Score score) {
+        this.score = score;
+    }
+
+    public SpriteBatch getBatch() {
+        return batch;
+    }
+
+    public void setBatch(SpriteBatch batch) {
+        this.batch = batch;
+    }
+
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
+
+    public void setCamera(OrthographicCamera camera) {
+        this.camera = camera;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }
