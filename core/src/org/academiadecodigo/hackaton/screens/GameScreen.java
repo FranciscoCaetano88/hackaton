@@ -7,8 +7,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -26,7 +28,7 @@ import org.academiadecodigo.hackaton.screens.objects.dropable.DropableFactory;
 public class GameScreen implements Screen {
 
 
-    private final double PRODUCTION_RATE=2;
+    private final double PRODUCTION_RATE = 2;
     public final static int SCREEN_SIZE_X = GameEngine.WIDTH;
     public final static int SCREEN_SIZE_Y = GameEngine.HEIGHT;
     private final int MOVE_SPEED = 400;
@@ -50,7 +52,7 @@ public class GameScreen implements Screen {
     private Rectangle backGround;
 
     private Player player;
-
+    private Texture door;
 
 
     public GameScreen(GameEngine game) {
@@ -63,6 +65,8 @@ public class GameScreen implements Screen {
 
         // load the images for the droplet and the player, 64x64 pixels each
         backGroundImage = new Texture(Gdx.files.internal("game_background.jpg"));
+
+        door = new Texture(Gdx.files.internal("red_door.jpg"));
 
         // load the dropable sound effect and the rain background "music"
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
@@ -148,9 +152,16 @@ public class GameScreen implements Screen {
 
         }
 
+        batch.end();
+
+        batch.begin();
+
+        //batch.setColor(0.5f,0.5f,0.5f,1F);
+        batch.draw(door, 240/2, 400/2);
+        batch.end();
+
         score.updateScoreBar();
 
-        batch.end();
 
         // begin a new batch and draw the player and
         // all drops
@@ -169,14 +180,19 @@ public class GameScreen implements Screen {
     }
 
     public void update(float delta) {
+
         // process user input
         if (Gdx.input.isTouched()) {
 
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
-            player.getRectangle().x = touchPos.x - 64 / 2;
+
+            checkForCollision(touchPos);
+
+            //player.getRectangle().x = touchPos.x - 64 / 2;
         }
+
 
         if (Gdx.input.isKeyPressed(Keys.LEFT)) {
             player.getRectangle().x -= MOVE_SPEED * Gdx.graphics.getDeltaTime();
@@ -223,6 +239,33 @@ public class GameScreen implements Screen {
                 score.incrementScore();
             }
         }
+    }
+
+    private void checkForCollision(Vector3 touchPos) {
+
+        float x = touchPos.x;
+        float y = touchPos.y;
+
+        Rectangle mouse = new Rectangle();
+
+        mouse.set(x, y, 10, 10);
+
+        for (Dropable dropable : dropables) {
+
+            if (mouse.overlaps(dropable.getRectangle())) {
+
+                if (dropable.isDepressed()) {
+
+                    dropable.setDepressed(false);
+                } else {
+
+                    dropable.setDepressed(true);
+                }
+
+            }
+
+        }
+
     }
 
     @Override
