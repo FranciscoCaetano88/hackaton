@@ -43,6 +43,7 @@ public class MainMenuScreen implements Screen {
         gameEngine.getFont().draw(gameEngine.getBatch(), "Start", 100, 400);//TODO: get this to work
         gameEngine.getBatch().end();
 
+
         if (Gdx.input.isTouched()) {
             gameEngine.setScreen(new GameScreen(gameEngine));
             dispose();

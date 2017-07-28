@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import org.academiadecodigo.hackaton.objects.text.MessageFactory;
 import org.academiadecodigo.hackaton.screens.MainMenuScreen;
 
 public class GameEngine extends Game {
@@ -14,8 +15,7 @@ public class GameEngine extends Game {
 	public static int HEIGHT;
 
 	public GameEngine() {
-		WIDTH = 480;
-		HEIGHT = 800;
+		this(480, 800);
 	}
 
 	public GameEngine(int width, int height) {

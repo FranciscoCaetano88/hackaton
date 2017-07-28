@@ -24,17 +24,16 @@ import org.academiadecodigo.hackaton.objects.dropable.DropableFactory;
 import org.academiadecodigo.hackaton.objects.text.Score;
 import org.academiadecodigo.hackaton.objects.Player;
 
-
 public class GameScreen implements Screen {
 
     public final static int SCREEN_SIZE_X = GameEngine.WIDTH;
     public final static int SCREEN_SIZE_Y = GameEngine.HEIGHT;
 
     private final int MOVE_SPEED = 400;
-    private final int DROP_SPEED = 300;
+    private final int DROP_SPEED = 200;
 
-    private final int DOOR_POSITION_X = 240 /2;
-    private final int DOOR_POSITION_Y = 400 /2;
+    private final int DOOR_POSITION_X = 240 / 2;
+    private final int DOOR_POSITION_Y = 400 / 2;
 
     private final double PRODUCTION_RATE = 2;// dropables per second
 
@@ -49,9 +48,10 @@ public class GameScreen implements Screen {
 
     private Array<Dropable> dropables;
     private long lastDropTime;
+    private long lastMoveTime;
+
 
     private Texture backGroundImage;
-    //private Rectangle backGround;
 
     private Player player;
     private Texture doorTexture;
@@ -116,6 +116,7 @@ public class GameScreen implements Screen {
         dropables.add(dropable);
 
         lastDropTime = TimeUtils.nanoTime();
+        lastMoveTime = TimeUtils.nanoTime();
     }
 
     @Override
@@ -141,11 +142,7 @@ public class GameScreen implements Screen {
         batch.draw(backGroundImage, 0, 0);
         batch.end();
 
-
         score.draw();
-        //batch.begin();//TODO:Joao faz o fading
-        //batch.draw(doorTexture, DOOR_POSITION_X, DOOR_POSITION_Y);
-        //batch.end();
 
         batch.begin();
         //batch.draw(backGroundImage, backGround.x, backGround.y);
@@ -185,7 +182,7 @@ public class GameScreen implements Screen {
 
         if (score.getScore() == 0) {
 
-            gameEngine.setScreen(new EndScreen(gameEngine,"positive_end.jpg"));
+            gameEngine.setScreen(new EndScreen(gameEngine, "happy_end.png"));
             dispose();
 
             return;
@@ -194,7 +191,7 @@ public class GameScreen implements Screen {
         //TODO: Implement the timer to set the end of game
         if (score.getScore() == 240) {
 
-            gameEngine.setScreen(new EndScreen(gameEngine,"negative_end.jpg"));
+            gameEngine.setScreen(new EndScreen(gameEngine, "sad_end.jpg"));
             dispose();
         }
 
@@ -246,9 +243,10 @@ public class GameScreen implements Screen {
 
         // check if we need to create a new raindrop
         if (TimeUtils.nanoTime() - lastDropTime > (1000000000 / PRODUCTION_RATE)) {
-
+            player.changeImage();
             spawnDropable();
         }
+
 
         // move the dropables, remove any that are beneath the bottom edge of
         // the screen or that hit the player. In the later case we play back
@@ -257,7 +255,7 @@ public class GameScreen implements Screen {
         while (iter.hasNext()) {
 
             Dropable dropable = iter.next();
-            dropable.getRectangle().y -= DROP_SPEED * Gdx.graphics.getDeltaTime();
+                dropable.getRectangle().y -= DROP_SPEED * Gdx.graphics.getDeltaTime();
 
             if (dropable.getRectangle().y + 64 < 0) {
 
