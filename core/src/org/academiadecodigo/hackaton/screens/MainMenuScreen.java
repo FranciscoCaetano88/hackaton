@@ -2,6 +2,7 @@ package org.academiadecodigo.hackaton.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,6 +14,7 @@ public class MainMenuScreen implements Screen {
     private final GameEngine gameEngine;
 
     private Texture texture;
+    private Music music;
 
     private OrthographicCamera camera;
 
@@ -23,6 +25,8 @@ public class MainMenuScreen implements Screen {
         camera.setToOrtho(false, GameEngine.WIDTH, GameEngine.HEIGHT);
 
         texture = new Texture(Gdx.files.internal("beg_screen.jpg"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
+
     }
 
     @Override
@@ -32,6 +36,11 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
+
+        // start the playback of the background music immediately
+        music.setLooping(true);
+        music.play();
+
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -73,5 +82,6 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose() {
         texture.dispose();
+        music.dispose();
     }
 }
