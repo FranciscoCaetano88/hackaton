@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 
 import org.academiadecodigo.hackaton.GameEngine;
+import org.academiadecodigo.hackaton.objects.text.Message;
+import org.academiadecodigo.hackaton.objects.text.MessageFactory;
 
 public class MainMenuScreen implements Screen {
 
@@ -40,8 +42,8 @@ public class MainMenuScreen implements Screen {
 
         gameEngine.getBatch().begin();
         gameEngine.getBatch().draw(texture, 0, 0);
-        gameEngine.getFont().draw(gameEngine.getBatch(), "Start", 100, 400);
         gameEngine.getBatch().end();
+
 
         if (Gdx.input.isTouched()) {
             gameEngine.setScreen(new GameScreen(gameEngine));
