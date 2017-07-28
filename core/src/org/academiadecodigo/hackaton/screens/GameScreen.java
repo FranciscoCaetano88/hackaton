@@ -58,7 +58,11 @@ public class GameScreen implements Screen {
     private Texture backGroundImage;
 
     private Player player;
-    private Fog fog;
+
+    private Fog fog0;
+    private Fog fog1;
+    private Fog fog2;
+
 
 
     private Message message = MessageFactory.generateMessage();
@@ -79,7 +83,9 @@ public class GameScreen implements Screen {
         music = Gdx.audio.newMusic(Gdx.files.internal("The Rolling Stones - Paint it black.mp3"));
 
         score = new Score();
-        fog = new Fog();
+        fog0 = new Fog(0);
+        fog1= new Fog(343);
+        fog2 = new Fog(686);
 
         player = new Player();
 
@@ -182,7 +188,9 @@ public class GameScreen implements Screen {
 
         batch.end();
 
-        fog.draw();
+        fog0.draw();
+        fog1.draw();
+        fog2.draw();
 
         handleInput();
 

@@ -6,9 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
-import static org.academiadecodigo.hackaton.screens.GameScreen.SCREEN_SIZE_X;
-import static org.academiadecodigo.hackaton.screens.GameScreen.SCREEN_SIZE_Y;
-
 /**
  * Created by codecadet on 28/07/17.
  */
@@ -22,29 +19,26 @@ public class Fog {
     private Rectangle rectangle;
 
     private boolean movingRight;
+    private int initialY;
 
+    public Fog(int initialY) {
 
+        this.initialY= initialY;
 
-    public Fog() {
         movingRight = true;
         fogBatch = new SpriteBatch();
         fogBatch.setColor(Color.GRAY);
-        rectangle = new Rectangle(-MIN_X,350,610,343);
+        rectangle = new Rectangle(-MIN_X,initialY,610,343);
 
         texture = new Texture(Gdx.files.internal("fog.png"));
         draw();
-    }
-
-    public Texture getTexture() {
-        return texture;
     }
 
     public void draw() {
 
         move();
         fogBatch.begin();
-        fogBatch.draw(texture, rectangle.x , 350);
-        System.out.println("Fog x " + rectangle.x);
+        fogBatch.draw(texture, rectangle.x , initialY);
         fogBatch.end();
 
     }
@@ -66,7 +60,6 @@ public class Fog {
         if (rectangle.x <= -MIN_X){
             movingRight = true;
         }
-
 
     }
 

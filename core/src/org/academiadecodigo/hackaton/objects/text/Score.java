@@ -54,7 +54,7 @@ public class Score {
             brightness = 0.14f;
         }
 
-        score += 10;
+        score += 5;
     }
 
     public void updateScoreBar() {
@@ -77,7 +77,7 @@ public class Score {
             brightness = 1f;
         }
 
-        score -= 10;
+        score -= 5;
 
         if (score < 0) {
             score = 0;
