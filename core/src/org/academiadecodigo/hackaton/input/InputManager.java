@@ -1,6 +1,7 @@
 package org.academiadecodigo.hackaton.input;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
 
@@ -20,7 +21,25 @@ public class InputManager implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        return false;
+        if (Gdx.input.isKeyPressed(keycode)) {
+            game.getPlayer().getRectangle().x -= GameScreen.MOVE_SPEED * Gdx.graphics.getDeltaTime();
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            game.getPlayer().getRectangle().x += GameScreen.MOVE_SPEED * Gdx.graphics.getDeltaTime();
+        }
+
+        // make sure the player stays within the screen bounds
+        if (game.getPlayer().getRectangle().x < 0) {
+            game.getPlayer().getRectangle().x = 0;
+        }
+
+        // make sure the player stays within the screen bounds
+        if (game.getPlayer().getRectangle().x > GameScreen.SCREEN_SIZE_X - 64) {
+            game.getPlayer().getRectangle().x = GameScreen.SCREEN_SIZE_X - 64;
+        }
+
+        return true;
     }
 
     @Override
