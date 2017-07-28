@@ -29,7 +29,7 @@ public class Score {
     private float alpha = 1f;
 
     public Score() {
-        brightness = 0.5F;
+        brightness = 0.75F;
         doorBatch = new SpriteBatch();
         score = SCREEN_SIZE_X / 8;
 
@@ -59,8 +59,6 @@ public class Score {
     }
 
     public void updateScoreBar() {
-
-
         doorBatch.begin();
         doorBatch.setColor(1f, 0, 0, brightness);
         doorBatch.end();
@@ -72,6 +70,7 @@ public class Score {
         if (score < 0) {
             return;
         }
+
 
 
         brightness += 0.024;
@@ -91,8 +90,6 @@ public class Score {
     }
 
     public void draw() {
-
-
         doorBatch.begin();
         doorBatch.setColor(brightness, green, blue, alpha);
         System.out.println("brightness is: " + brightness);

@@ -21,6 +21,8 @@ import org.academiadecodigo.hackaton.GameEngine;
 
 import org.academiadecodigo.hackaton.objects.dropable.Dropable;
 import org.academiadecodigo.hackaton.objects.dropable.DropableFactory;
+import org.academiadecodigo.hackaton.objects.text.Message;
+import org.academiadecodigo.hackaton.objects.text.MessageFactory;
 import org.academiadecodigo.hackaton.objects.text.Score;
 import org.academiadecodigo.hackaton.objects.Player;
 
@@ -48,7 +50,7 @@ public class GameScreen implements Screen {
 
     private Array<Dropable> dropables;
     private long lastDropTime;
-    private long lastMoveTime;
+    private long lastMessageTime = TimeUtils.millis();
 
 
     private Texture backGroundImage;
@@ -56,6 +58,7 @@ public class GameScreen implements Screen {
     private Player player;
     private Texture doorTexture;
 
+    private Message message = MessageFactory.generateMessage();
 
     public GameScreen(GameEngine gameEngine) {
         this.gameEngine = gameEngine;
@@ -116,7 +119,6 @@ public class GameScreen implements Screen {
         dropables.add(dropable);
 
         lastDropTime = TimeUtils.nanoTime();
-        lastMoveTime = TimeUtils.nanoTime();
     }
 
     @Override
@@ -169,6 +171,8 @@ public class GameScreen implements Screen {
 
         }
 
+        message.draw(batch, gameEngine.getFont(), delta, 20, 760);
+
         batch.end();
 
         handleInput();
@@ -189,7 +193,7 @@ public class GameScreen implements Screen {
         }
 
         //TODO: Implement the timer to set the end of game
-        if (score.getScore() == 240) {
+        if (score.getScore() >= 240) {
 
             gameEngine.setScreen(new EndScreen(gameEngine, "sad_end.jpg"));
             dispose();
@@ -247,6 +251,10 @@ public class GameScreen implements Screen {
             spawnDropable();
         }
 
+        if(TimeUtils.millis() - lastMessageTime > 5000) {
+            message = MessageFactory.generateMessage();
+            lastMessageTime = TimeUtils.millis();
+        }
 
         // move the dropables, remove any that are beneath the bottom edge of
         // the screen or that hit the player. In the later case we play back
@@ -289,15 +297,16 @@ public class GameScreen implements Screen {
 
         Rectangle mouse = new Rectangle();
 
-        mouse.set(x, y, 10, 10);
+        mouse.set(x, y, 1, 1);
 
         for (Dropable dropable : dropables) {
 
             if (mouse.overlaps(dropable.getRectangle())) {
-
                 dropable.setDepressed(true);
             }
         }
+
+
     }
 
     @Override
