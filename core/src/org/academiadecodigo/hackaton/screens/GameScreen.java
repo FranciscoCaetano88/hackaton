@@ -7,10 +7,8 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -27,16 +25,15 @@ import org.academiadecodigo.hackaton.screens.objects.dropable.DropableFactory;
 
 public class GameScreen implements Screen {
 
-
-    private final double PRODUCTION_RATE = 2;
     public final static int SCREEN_SIZE_X = GameEngine.WIDTH;
     public final static int SCREEN_SIZE_Y = GameEngine.HEIGHT;
+
     private final int MOVE_SPEED = 400;
     private final int DROP_SPEED = 300;
 
-    private final GameEngine game;
+    private final double PRODUCTION_RATE = 3;// dropables per second
 
-    private int dropsGathered;
+    private final GameEngine game;
 
     private Score score;
 
@@ -57,7 +54,6 @@ public class GameScreen implements Screen {
 
     public GameScreen(GameEngine game) {
         this.game = game;
-        dropsGathered = 0;
         init();
     }
 
@@ -81,7 +77,6 @@ public class GameScreen implements Screen {
     public void show() {
 
         player.create();
-
 
         // start the playback of the background music immediately
         music.setLooping(true);
@@ -149,7 +144,6 @@ public class GameScreen implements Screen {
 
                     dropable.getRectangle().x,
                     dropable.getRectangle().y);
-
         }
 
         batch.end();
@@ -157,16 +151,15 @@ public class GameScreen implements Screen {
         batch.begin();
 
         //batch.setColor(0.5f,0.5f,0.5f,1F);
-        batch.draw(door, 240/2, 400/2);
+        batch.draw(door, 240 / 2, 400 / 2);
         batch.end();
 
         score.updateScoreBar();
 
-
         // begin a new batch and draw the player and
         // all drops
         batch.begin();
-        batch.draw(player.getBucketImage(), player.getRectangle().x, player.getRectangle().y);
+        batch.draw(player.getImage(), player.getRectangle().x, player.getRectangle().y);
 
         for (Dropable dropable : dropables) {
 
@@ -176,19 +169,33 @@ public class GameScreen implements Screen {
 
         batch.end();
 
-        update(delta);
+        update();
     }
 
-    public void update(float delta) {
+
+
+    public void update() {
 
         // process user input
         if (Gdx.input.isTouched()) {
 
             Vector3 touchPos = new Vector3();
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            touchPos.set(Gdx.input.getX(0), Gdx.input.getY(0), 0);
+
+
+            Vector3 touchPos2 = new Vector3();
+            touchPos2.set(Gdx.input.getX(1), Gdx.input.getY(1), 0);
+
+            System.out.println(touchPos2.x + " <--x  y--> " + touchPos2.y);
+
             camera.unproject(touchPos);
 
-            checkForCollision(touchPos);
+            if (touchPos.y < 100) {
+
+                player.getRectangle().x = touchPos.x - 64 / 2;
+            }
+
+            checkMouseClick(touchPos);
 
             //player.getRectangle().x = touchPos.x - 64 / 2;
         }
@@ -223,25 +230,35 @@ public class GameScreen implements Screen {
         Iterator<Dropable> iter = dropables.iterator();
         while (iter.hasNext()) {
 
-            Dropable raindrop = iter.next();
-            raindrop.getRectangle().y -= DROP_SPEED * Gdx.graphics.getDeltaTime();
+            Dropable dropable = iter.next();
+            dropable.getRectangle().y -= DROP_SPEED * Gdx.graphics.getDeltaTime();
 
-            if (raindrop.getRectangle().y + 64 < 0) {
-                iter.remove();
+            if (dropable.getRectangle().y + 64 < 0) {
 
                 score.decrementScore();
+                iter.remove();
             }
 
-            if (raindrop.getRectangle().overlaps(player.getRectangle())) {
+            if (dropable.getRectangle().overlaps(player.getRectangle())) {
                 dropSound.play();
                 iter.remove();
 
-                score.incrementScore();
+                if (dropable.isDepressed()) {
+
+                    score.incrementScore();
+                    score.incrementScore();
+
+                } else {
+
+                    score.decrementScore();
+                    score.decrementScore();
+                }
+
             }
         }
     }
 
-    private void checkForCollision(Vector3 touchPos) {
+    private void checkMouseClick(Vector3 touchPos) {
 
         float x = touchPos.x;
         float y = touchPos.y;
@@ -254,18 +271,9 @@ public class GameScreen implements Screen {
 
             if (mouse.overlaps(dropable.getRectangle())) {
 
-                if (dropable.isDepressed()) {
-
-                    dropable.setDepressed(false);
-                } else {
-
-                    dropable.setDepressed(true);
-                }
-
+                dropable.setDepressed(true);
             }
-
         }
-
     }
 
     @Override
@@ -292,7 +300,7 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         // dispose of all the native resources
-        player.getBucketImage().dispose();
+        player.getImage().dispose();
         dropSound.dispose();
         music.dispose();
         batch.dispose();
