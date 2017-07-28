@@ -17,19 +17,18 @@ public class Score {
     private int score;
     private SpriteBatch doorBatch;
     private ShapeRenderer shapeRenderer;
-    private Texture doorImage;
+    private Texture doorTexture;
+    private float brightness;
 
     public Score() {
+        brightness = 0.5F;
         score = SCREEN_SIZE_X / 8;
 
-        doorImage = new Texture(Gdx.files.internal("beg_screen.jpg"));
+        doorTexture = new Texture(Gdx.files.internal("red_door.jpg"));
+        doorBatch.begin();
+        doorBatch.setColor(0.5f, 0.5f, 0.5f, brightness);
+        doorBatch.end();
 
-        shapeRenderer = new ShapeRenderer();
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.rect(5, 10, score, 20);
-        shapeRenderer.end();
     }
 
     public int getScore() {
@@ -42,17 +41,17 @@ public class Score {
             return;
         }
 
+        brightness += 0.1F;
+
         score += 10;
     }
 
     public void updateScoreBar() {
 
 
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.rect(5, 10, score, 50);
-        shapeRenderer.end();
+        doorBatch.begin();
+        doorBatch.setColor(0.5f, 0.5f, 0.5f, brightness);
+        doorBatch.end();
     }
 
 
@@ -61,6 +60,8 @@ public class Score {
         if (score < 0) {
             return;
         }
+
+        brightness -= 0.1F;
 
         score -= 10;
 
@@ -71,6 +72,5 @@ public class Score {
 
     public void dispose() {
 
-//        shapeRenderer.dispose();
     }
 }

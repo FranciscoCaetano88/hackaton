@@ -142,7 +142,7 @@ public class GameScreen implements Screen {
         batch.end();
 
         batch.begin();//TODO:Joao faz o fading
-        //batch.setColor(0.5f,0.5f,0.5f,1F);
+
         batch.draw(doorTexture, DOOR_POSITION_X, DOOR_POSITION_Y);
         batch.end();
 
