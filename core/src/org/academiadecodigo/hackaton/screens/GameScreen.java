@@ -236,6 +236,8 @@ public class GameScreen implements Screen {
 
             camera.unproject(touchPos);
 
+
+
             checkMouseClick(touchPos);
 
         }

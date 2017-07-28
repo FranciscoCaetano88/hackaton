@@ -14,6 +14,7 @@ public class MainMenuScreen implements Screen {
     private final GameEngine gameEngine;
 
     private Texture texture;
+    private Texture glassEffect;
     private Music music;
 
     private OrthographicCamera camera;
@@ -25,6 +26,7 @@ public class MainMenuScreen implements Screen {
         camera.setToOrtho(false, GameEngine.WIDTH, GameEngine.HEIGHT);
 
         texture = new Texture(Gdx.files.internal("beg_screen.jpg"));
+        glassEffect = new Texture(Gdx.files.internal("glass_effect.png"));
         music = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
 
     }
@@ -49,6 +51,7 @@ public class MainMenuScreen implements Screen {
 
         gameEngine.getBatch().begin();
         gameEngine.getBatch().draw(texture, 0, 0);
+        gameEngine.getBatch().draw(glassEffect, 0, 0);
         gameEngine.getBatch().end();
 
 
