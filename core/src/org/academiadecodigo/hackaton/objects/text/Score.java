@@ -1,5 +1,6 @@
 package org.academiadecodigo.hackaton.objects.text;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,8 +14,8 @@ import static org.academiadecodigo.hackaton.screens.GameScreen.SCREEN_SIZE_Y;
 
 public class Score {
 
-    private final int DOOR_POSITION_X = SCREEN_SIZE_X / 2 -120;
-    private final int DOOR_POSITION_Y = SCREEN_SIZE_Y / 4;
+    private final int DOOR_POSITION_X = Gdx.graphics.getWidth() / 2 - 120;
+    private final int DOOR_POSITION_Y = Gdx.graphics.getHeight() / 4;
 
     private int score;
     private SpriteBatch doorBatch;
