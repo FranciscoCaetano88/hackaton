@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import org.academiadecodigo.hackaton.GameEngine;
 
 import org.academiadecodigo.hackaton.input.InputManager;
+import org.academiadecodigo.hackaton.objects.Fog;
 import org.academiadecodigo.hackaton.objects.dropable.Dropable;
 import org.academiadecodigo.hackaton.objects.dropable.DropableFactory;
 import org.academiadecodigo.hackaton.objects.text.Message;
@@ -57,7 +58,8 @@ public class GameScreen implements Screen {
     private Texture backGroundImage;
 
     private Player player;
-    private Texture doorTexture;
+    private Fog fog;
+
 
     private Message message = MessageFactory.generateMessage();
 
@@ -71,13 +73,13 @@ public class GameScreen implements Screen {
 
         // load the images for the droplet and the player, 64x64 pixels each
         backGroundImage = new Texture(Gdx.files.internal("game_background.jpg"));
-        doorTexture = new Texture(Gdx.files.internal("red_door.jpg"));
 
         // load the dropable sound effect and the rain background "music"
         dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
         music = Gdx.audio.newMusic(Gdx.files.internal("The Rolling Stones - Paint it black.mp3"));
 
         score = new Score();
+        fog = new Fog();
 
         player = new Player();
 
@@ -150,6 +152,7 @@ public class GameScreen implements Screen {
 
         score.draw();
 
+
         batch.begin();
         //batch.draw(backGroundImage, backGround.x, backGround.y);
 
@@ -179,6 +182,8 @@ public class GameScreen implements Screen {
 
         batch.end();
 
+        fog.draw();
+
         handleInput();
 
         checkScore();
@@ -186,7 +191,7 @@ public class GameScreen implements Screen {
 
     private void checkScore() {
 
-        System.out.println(score.getScore());
+        System.out.println("Score: " + score.getScore());
 
         if (score.getScore() == 0) {
 
@@ -344,7 +349,6 @@ public class GameScreen implements Screen {
         //batch.dispose();
         backGroundImage.dispose();
 
-        doorTexture.dispose();
     }
 
     public GameEngine getGameEngine() {
