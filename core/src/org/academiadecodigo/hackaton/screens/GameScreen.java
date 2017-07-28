@@ -141,10 +141,11 @@ public class GameScreen implements Screen {
         batch.draw(backGroundImage, 0, 0);
         batch.end();
 
-        batch.begin();//TODO:Joao faz o fading
 
-        batch.draw(doorTexture, DOOR_POSITION_X, DOOR_POSITION_Y);
-        batch.end();
+        score.draw();
+        //batch.begin();//TODO:Joao faz o fading
+        //batch.draw(doorTexture, DOOR_POSITION_X, DOOR_POSITION_Y);
+        //batch.end();
 
         batch.begin();
         //batch.draw(backGroundImage, backGround.x, backGround.y);
