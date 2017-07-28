@@ -40,6 +40,7 @@ public class MainMenuScreen implements Screen {
 
         gameEngine.getBatch().begin();
         gameEngine.getBatch().draw(texture, 0, 0);
+        gameEngine.getFont().draw(gameEngine.getBatch(), "Start", 100, 400);
         gameEngine.getBatch().end();
 
         if (Gdx.input.isTouched()) {
@@ -70,6 +71,6 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        texture.dispose();
     }
 }
