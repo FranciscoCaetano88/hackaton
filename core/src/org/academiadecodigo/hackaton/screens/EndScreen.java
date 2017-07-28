@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.async.ThreadUtils;
 
 import org.academiadecodigo.hackaton.GameEngine;
@@ -45,11 +46,13 @@ public class EndScreen implements Screen {
         if(Gdx.input.isTouched()) {
             dispose();
 
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+            Timer timer= new Timer();
+            timer.delay(2000);
+            timer.start();
+
+
+
             game.setScreen(new MainMenuScreen(game));
         }
 
