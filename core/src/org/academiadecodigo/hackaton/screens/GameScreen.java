@@ -19,9 +19,9 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import org.academiadecodigo.hackaton.GameEngine;
 
-import org.academiadecodigo.hackaton.screens.objects.Player;
-import org.academiadecodigo.hackaton.screens.objects.dropable.Dropable;
-import org.academiadecodigo.hackaton.screens.objects.dropable.DropableFactory;
+import org.academiadecodigo.hackaton.objects.text.Score;
+import org.academiadecodigo.hackaton.objects.dropable.Dropable;
+import org.academiadecodigo.hackaton.objects.dropable.DropableFactory;
 
 public class GameScreen implements Screen {
 
@@ -48,7 +48,7 @@ public class GameScreen implements Screen {
     private Texture backGroundImage;
     private Rectangle backGround;
 
-    private Player player;
+    private org.academiadecodigo.hackaton.objects.Player player;
     private Texture door;
 
 
@@ -70,7 +70,7 @@ public class GameScreen implements Screen {
 
         score = new Score();
 
-        player = new Player();
+        player = new org.academiadecodigo.hackaton.objects.Player();
     }
 
     @Override

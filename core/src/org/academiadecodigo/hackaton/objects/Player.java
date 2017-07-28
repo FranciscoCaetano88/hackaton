@@ -1,4 +1,4 @@
-package org.academiadecodigo.hackaton.screens.objects;
+package org.academiadecodigo.hackaton.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

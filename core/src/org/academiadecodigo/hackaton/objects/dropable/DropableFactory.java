@@ -1,4 +1,4 @@
-package org.academiadecodigo.hackaton.screens.objects.dropable;
+package org.academiadecodigo.hackaton.objects.dropable;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
