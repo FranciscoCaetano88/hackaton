@@ -13,34 +13,51 @@ import static org.academiadecodigo.hackaton.screens.GameScreen.SCREEN_SIZE_X;
 
 public class Player {
 
-    private Texture bucketImage;
-    private Rectangle bucket;
+    private Texture texture;
+    private Rectangle rectangle;
+    private boolean up = true;
 
-    public void create(){
+    public Player() {
 
-        bucketImage = new Texture(Gdx.files.internal("player.png"));
+        changeImage();
 
-        // create a Rectangle to logically represent the bucket
-        bucket=new Rectangle();
-        //bucket.setX()
-        bucket.x = SCREEN_SIZE_X / 2 - 64 / 2; // center the bucket horizontally
-        bucket.y = 20; // bottom left corner of the bucket is 20 pixels above the bottom screen edge
-        bucket.width = 64;
-        bucket.height = 64;
+        // create a Rectangle to logically represent the rectangle
+        rectangle = new Rectangle();
+        //rectangle.setX()
+        rectangle.x = SCREEN_SIZE_X / 2 - 64 / 2; // center the rectangle horizontally
+        rectangle.y = 20; // bottom left corner of the rectangle is 20 pixels above the bottom screen edge
+        rectangle.width = 64;
+        rectangle.height = 64;
     }
+
     public Texture getImage() {
-        return bucketImage;
+        return texture;
     }
 
-    public void setBucketImage(Texture bucketImage) {
-        this.bucketImage = bucketImage;
+    public void setTexture(Texture texture) {
+        this.texture = texture;
     }
 
     public Rectangle getRectangle() {
-        return bucket;
+        return rectangle;
     }
 
-    public void setBucket(Rectangle bucket) {
-        this.bucket = bucket;
+    public void setRectangle(Rectangle rectangle) {
+        this.rectangle = rectangle;
+    }
+
+    public void changeImage() {
+
+        if (up) {
+
+            texture = new Texture(Gdx.files.internal("player.png"));
+            up = false;
+            return;
+        }
+
+        texture = new Texture(Gdx.files.internal("player_move.png"));
+        up = true;
+
+
     }
 }
