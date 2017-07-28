@@ -19,7 +19,6 @@ public class Score {
 
     private int score;
     private SpriteBatch doorBatch;
-    private ShapeRenderer shapeRenderer;
     private Texture doorTexture;
     private float brightness;
 
@@ -92,7 +91,6 @@ public class Score {
     public void draw() {
         doorBatch.begin();
         doorBatch.setColor(brightness, green, blue, alpha);
-        System.out.println("brightness is: " + brightness);
         doorBatch.draw(doorTexture, DOOR_POSITION_X, DOOR_POSITION_Y);
         doorBatch.end();
     }
