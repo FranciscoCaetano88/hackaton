@@ -28,7 +28,7 @@ public class Player {
         bucket.width = 64;
         bucket.height = 64;
     }
-    public Texture getBucketImage() {
+    public Texture getImage() {
         return bucketImage;
     }
 
