@@ -19,9 +19,10 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import org.academiadecodigo.hackaton.GameEngine;
 
-import org.academiadecodigo.hackaton.screens.objects.Player;
-import org.academiadecodigo.hackaton.screens.objects.dropable.Dropable;
-import org.academiadecodigo.hackaton.screens.objects.dropable.DropableFactory;
+import org.academiadecodigo.hackaton.objects.*;
+import org.academiadecodigo.hackaton.objects.dropable.Dropable;
+import org.academiadecodigo.hackaton.objects.dropable.DropableFactory;
+import org.academiadecodigo.hackaton.objects.text.Score;
 
 public class GameScreen implements Screen {
 
@@ -35,7 +36,7 @@ public class GameScreen implements Screen {
 
     private final GameEngine game;
 
-    private Score score;
+    private org.academiadecodigo.hackaton.objects.text.Score score;
 
     private Sound dropSound;
     private Music music;

@@ -1,4 +1,4 @@
-package org.academiadecodigo.hackaton.screens;
+package org.academiadecodigo.hackaton.objects.text;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
