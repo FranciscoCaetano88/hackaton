@@ -37,9 +37,6 @@ public class GameScreen implements Screen {
     private final int MOVE_SPEED = 400;
     private final int DROP_SPEED = 200;
 
-    private final int DOOR_POSITION_X = 240 / 2;
-    private final int DOOR_POSITION_Y = 400 / 2;
-
     private final double PRODUCTION_RATE = 2;// dropables per second
 
     private final GameEngine gameEngine;
