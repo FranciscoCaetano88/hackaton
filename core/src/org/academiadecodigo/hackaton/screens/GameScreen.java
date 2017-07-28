@@ -5,7 +5,6 @@ import java.util.Iterator;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -21,7 +20,6 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import org.academiadecodigo.hackaton.GameEngine;
 
-import org.academiadecodigo.hackaton.input.InputManager;
 import org.academiadecodigo.hackaton.objects.Fog;
 import org.academiadecodigo.hackaton.objects.dropable.Dropable;
 import org.academiadecodigo.hackaton.objects.dropable.DropableFactory;
@@ -57,9 +55,7 @@ public class GameScreen implements Screen {
 
     private Player player;
 
-    private Fog fog0;
-    private Fog fog1;
-    private Fog fog2;
+    private Fog fog;
 
 
 
@@ -82,9 +78,7 @@ public class GameScreen implements Screen {
 
         score = new Score();
 
-        fog0 = new Fog(0);
-        fog1= new Fog(343);
-        fog2 = new Fog(686);
+        fog = new Fog(0);
 
         player = new Player();
 
@@ -190,9 +184,7 @@ public class GameScreen implements Screen {
         if(Gdx.app.getType() == Application.ApplicationType.Desktop) {
 
             //TODO: Change the fog on desktop: it's made of 3 different images, and should be only one
-            fog0.draw();
-            fog1.draw();
-            fog2.draw();
+            fog.draw();
         }
 
         handleInput();
@@ -236,7 +228,9 @@ public class GameScreen implements Screen {
 
             camera.unproject(touchPos);
 
-
+            if (touchPos.y < 100) {
+                player.getRectangle().x = touchPos.x - 64 / 2;
+            }
 
             checkMouseClick(touchPos);
 
