@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -19,6 +20,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 
 import org.academiadecodigo.hackaton.GameEngine;
 
+import org.academiadecodigo.hackaton.input.InputManager;
 import org.academiadecodigo.hackaton.objects.dropable.Dropable;
 import org.academiadecodigo.hackaton.objects.dropable.DropableFactory;
 import org.academiadecodigo.hackaton.objects.text.Message;
@@ -52,7 +54,6 @@ public class GameScreen implements Screen {
     private long lastDropTime;
     private long lastMessageTime = TimeUtils.millis();
 
-
     private Texture backGroundImage;
 
     private Player player;
@@ -67,6 +68,7 @@ public class GameScreen implements Screen {
 
     private void init() {
 
+
         // load the images for the droplet and the player, 64x64 pixels each
         backGroundImage = new Texture(Gdx.files.internal("game_background.jpg"));
         doorTexture = new Texture(Gdx.files.internal("red_door.jpg"));
@@ -78,6 +80,8 @@ public class GameScreen implements Screen {
         score = new Score();
 
         player = new Player();
+
+        Gdx.input.setInputProcessor(new InputManager(this));
     }
 
     @Override
@@ -203,7 +207,7 @@ public class GameScreen implements Screen {
 
 
     public void handleInput() {
-
+/*
         // process user input
         if (Gdx.input.isTouched()) {
 
@@ -226,7 +230,7 @@ public class GameScreen implements Screen {
             //player.getRectangle().x = touchPos.x - 64 / 2;
         }
 
-
+*/
         if (Gdx.input.isKeyPressed(Keys.LEFT)) {
             player.getRectangle().x -= MOVE_SPEED * Gdx.graphics.getDeltaTime();
         }
@@ -290,14 +294,14 @@ public class GameScreen implements Screen {
         }
     }
 
-    private void checkMouseClick(Vector3 touchPos) {
+    public void checkMouseClick(Vector3 touchPos) {
 
         float x = touchPos.x;
         float y = touchPos.y;
 
         Rectangle mouse = new Rectangle();
 
-        mouse.set(x, y, 1, 1);
+        mouse.set(x, y, 10, 10);
 
         for (Dropable dropable : dropables) {
 
@@ -341,5 +345,41 @@ public class GameScreen implements Screen {
         backGroundImage.dispose();
 
         doorTexture.dispose();
+    }
+
+    public GameEngine getGameEngine() {
+        return gameEngine;
+    }
+
+    public Score getScore() {
+        return score;
+    }
+
+    public void setScore(Score score) {
+        this.score = score;
+    }
+
+    public SpriteBatch getBatch() {
+        return batch;
+    }
+
+    public void setBatch(SpriteBatch batch) {
+        this.batch = batch;
+    }
+
+    public OrthographicCamera getCamera() {
+        return camera;
+    }
+
+    public void setCamera(OrthographicCamera camera) {
+        this.camera = camera;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }
