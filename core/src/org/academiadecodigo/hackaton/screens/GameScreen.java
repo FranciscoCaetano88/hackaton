@@ -194,11 +194,9 @@ public class GameScreen implements Screen {
 
         if (Gdx.app.getType() == Application.ApplicationType.Desktop) {
 
-            //TODO: Change the fog on desktop: it's made of 3 different images, and should be only one
             fog.draw();
         }
 
-        //fog.draw();
 
         handleInput();
 
@@ -207,11 +205,13 @@ public class GameScreen implements Screen {
 
     private void checkScore() {
 
-        System.out.println("Score: " + score.getScore());
+        //System.out.println("Score: " + score.getScore());
+        EndScreen endScreen = new EndScreen(gameEngine);
 
         if (score.getScore() == 0) {
 
-            gameEngine.setScreen(new EndScreen(gameEngine, "happy_end.png"));
+            endScreen.setBackGroundImage(new Texture(Gdx.files.internal("happy_end.png")));
+            endScreen.setMusic(music);
 
             dispose();
 
@@ -220,7 +220,9 @@ public class GameScreen implements Screen {
 
         if (score.getScore() >= 240) {
 
-            gameEngine.setScreen(new EndScreen(gameEngine, "sad_end.jpg"));
+            endScreen.setBackGroundImage(new Texture(Gdx.files.internal("sad_end.png")));
+            endScreen.setMusic(music);
+
             dispose();
 
         }

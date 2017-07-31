@@ -5,22 +5,31 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.utils.async.ThreadUtils;
 
 import org.academiadecodigo.hackaton.GameEngine;
 
+import static org.academiadecodigo.hackaton.screens.GameScreen.SCREEN_SIZE_X;
+import static org.academiadecodigo.hackaton.screens.GameScreen.SCREEN_SIZE_Y;
+
 public class EndScreen implements Screen {
+    private Texture nextMessage;
 
     private final GameEngine game;
     private Texture backGroundImage;
     private Music music;//TODO: music for initial screen, and if possible @Chiquinho uma animação
 
-    public EndScreen(GameEngine game, String path) {
+    public EndScreen(GameEngine game) {
         this.game = game;
-        this.backGroundImage = new Texture(Gdx.files.internal(path));
+        nextMessage = new Texture(Gdx.files.internal("play.png"));
     }
 
+    public void setBackGroundImage(Texture backGroundImage) {
+        this.backGroundImage = backGroundImage;
+    }
+
+    public void setMusic(Music music) {
+        this.music = music;
+    }
 
     @Override
     public void show() {
@@ -43,18 +52,23 @@ public class EndScreen implements Screen {
         game.getBatch().draw(backGroundImage, 0, 0);
         game.getBatch().end();
 
-        if(Gdx.input.isTouched()) {
-            dispose();
+        game.getBatch().begin();
+        game.getBatch().draw(nextMessage, (int) (SCREEN_SIZE_X * 0.85), (int) (SCREEN_SIZE_Y * 0.1));
+        game.getBatch().end();
 
 
-            Timer timer= new Timer();
-            timer.delay(2000);
-            timer.start();
+        if (Gdx.input.isTouched()) {
 
+            if (Gdx.input.getX(0) > SCREEN_SIZE_X * 0.85 &&
+                    Gdx.input.getY(0) > SCREEN_SIZE_Y * 0.85 &&
+                    Gdx.input.getY(0) < SCREEN_SIZE_Y * 0.95) {
+                dispose();
+                game.setScreen(new GameScreen(game));
+            }
 
-
-            game.setScreen(new MainMenuScreen(game));
         }
+
+
 
     }
 
