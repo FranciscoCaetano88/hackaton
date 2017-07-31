@@ -18,7 +18,7 @@ public class MainMenuScreen implements Screen {
 
     private final GameEngine gameEngine;
 
-    private Texture nextMessage;
+    private Texture play;
     private Texture background;
     private Texture glassEffect;
     private Music music;
@@ -40,7 +40,7 @@ public class MainMenuScreen implements Screen {
         glassEffect = new Texture(Gdx.files.internal("glass_effect.jpg"));
         music = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
 
-        nextMessage = new Texture(Gdx.files.internal("play.png"));
+        play = new Texture(Gdx.files.internal("play.png"));
     }
 
     @Override
@@ -66,7 +66,7 @@ public class MainMenuScreen implements Screen {
         gameEngine.getBatch().end();
 
         gameEngine.getBatch().begin();
-        gameEngine.getBatch().draw(nextMessage, (int) (SCREEN_SIZE_X * 0.85), (int) (SCREEN_SIZE_Y * 0.1));
+        gameEngine.getBatch().draw(play, (int) (SCREEN_SIZE_X * 0.85), (int) (SCREEN_SIZE_Y * 0.1));
         gameEngine.getBatch().end();
 
 

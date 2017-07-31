@@ -56,6 +56,7 @@ public class GameScreen implements Screen {
     private Player player;
 
     private Fog fog;
+    private Music happyEndMusic;
 
 
     private Message message = MessageFactory.generateMessage();
@@ -77,6 +78,8 @@ public class GameScreen implements Screen {
         sadCatchSound = Gdx.audio.newSound(Gdx.files.internal("sigh.mp3"));
 
         music = Gdx.audio.newMusic(Gdx.files.internal("The Rolling Stones - Paint it black.mp3"));
+
+        happyEndMusic = Gdx.audio.newMusic(Gdx.files.internal("happy_end.wav"));
 
         score = new Score();
 
@@ -208,13 +211,13 @@ public class GameScreen implements Screen {
         //System.out.println("Score: " + score.getScore());
         EndScreen endScreen = new EndScreen(gameEngine);
 
-        if (score.getScore() == 0) {
+        if (score.getScore() <= 0) {
 
             endScreen.setBackGroundImage(new Texture(Gdx.files.internal("happy_end.png")));
-            endScreen.setMusic(music);
+            endScreen.setMusic(happyEndMusic);
 
             dispose();
-
+            gameEngine.setScreen(endScreen);
             return;
         }
 
@@ -224,6 +227,7 @@ public class GameScreen implements Screen {
             endScreen.setMusic(music);
 
             dispose();
+            gameEngine.setScreen(endScreen);
 
         }
 

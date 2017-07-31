@@ -45,8 +45,8 @@ public class EndScreen implements Screen {
         Gdx.gl.glClearColor(0, 0, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // load the dropable sound effect and the rain background "music"
-        music = Gdx.audio.newMusic(Gdx.files.internal("The Rolling Stones - Paint it black.mp3"));
+       music.setLooping(true);
+        music.play();
 
         game.getBatch().begin();
         game.getBatch().draw(backGroundImage, 0, 0);
